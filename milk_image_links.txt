@@ -1,0 +1,59 @@
+====================================================
+  CARDMILK.HTML — ONLINE IMAGE LINKS
+====================================================
+
+CARD 9  — Hatsun Arokya Toned Milk
+https://images.openfoodfacts.org/images/products/890/405/739/6166/front_en.21.400.jpg
+
+CARD 10 — Hatsun Cow Fresh Milk
+https://cdn.grofers.com/cdn-cgi/image/f=auto,fit=scale-down,q=70,metadata=none,w=1080/da/cms-assets/cms/product/db150576-729c-49fb-8978-c363e9630e93.png
+
+CARD 11 — Hatsun Arokya Full Cream Milk
+https://images.openfoodfacts.org/images/products/890/405/739/6041/front_en.4.400.jpg
+
+CARD 13 — Visakha Full Cream Milk
+https://www.bigbasket.com/media/uploads/p/l/40008055_6-visakha-dairy-full-cream-milk.jpg
+
+CARD 14 — Nandini Toned Milk
+https://www.bigbasket.com/media/uploads/p/l/40075743_4-nandini-toned-milk.jpg
+
+CARD 15 — Nandini Full Cream Milk
+https://www.bigbasket.com/media/uploads/p/l/40075741_4-nandini-full-cream-milk.jpg
+
+CARD 16 — Nandini Double Toned Milk
+https://www.bigbasket.com/media/uploads/p/l/40075745_4-nandini-double-toned-milk.jpg
+
+CARD 17 — Heritage Standardised Milk
+https://m.media-amazon.com/images/I/61-plmwVYrL._AC_UF894,1000_QL80_.jpg
+
+CARD 18 — Jersey Milk 1L
+https://m.media-amazon.com/images/I/71ujS7xbSaL.jpg
+
+CARD 19 — Amul Gold 1L
+https://www.bbassets.com/media/uploads/p/l/40175764_7-amul-amul-gold.jpg
+
+CARD 20 — Hatsun Arokya Double Toned Milk
+https://images.openfoodfacts.org/images/products/890/405/739/6166/front_en.21.400.jpg
+
+CARD 21 — Visakha Double Toned Milk
+https://www.bigbasket.com/media/uploads/p/l/40008053_6-visakha-dairy-toned-milk.jpg
+
+CARD 22 — Visakha Shakti Standardised Milk
+https://www.bbassets.com/media/uploads/p/l/40293263_1-visakha-dairy-standardised-milk-fortified-with-vitamin-a-d.jpg
+
+CARD 23 — Nandini Homogenised Cow Milk
+https://5.imimg.com/data5/MV/TN/NA/GLADMIN-2578670/homogenised-20toned-20milk-500ml-0-1000x1000.jpg
+
+CARD 24 — Heritage Gold Cow Milk
+https://www.bbassets.com/media/uploads/p/l/40147023_2-heritage-golden-cow-milk.jpg
+
+====================================================
+  SOURCE DOMAINS USED
+====================================================
+- images.openfoodfacts.org  (Open Food Facts — free/open)
+- cdn.grofers.com            (Blinkit/Grofers CDN)
+- www.bigbasket.com          (BigBasket product images)
+- www.bbassets.com           (BigBasket CDN assets)
+- m.media-amazon.com         (Amazon product images)
+- 5.imimg.com                (IndiaMART images)
+====================================================

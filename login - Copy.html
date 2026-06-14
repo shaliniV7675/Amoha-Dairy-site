@@ -1,0 +1,505 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amoha Dairy - Login</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            background: #F5EBDD;
+        }
+
+        
+        .nut {
+            background-image:
+                linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+                url("imo.png.jpeg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: calc(100vh - 80px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 16px;
+        }
+
+        /* ── LOGIN CARD ── */
+        .login-box {
+            background: rgba(255,255,255,0.9);
+            width: 100%;
+            max-width: 420px;
+            padding: 36px 32px;
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .login-box .brand {
+            font-size: 26px;
+            font-weight: bold;
+            color: #5b381e;
+        }
+
+        .login-box .brand span {
+            display: block;
+            font-size: 15px;
+            color: #666;
+            font-weight: normal;
+            margin-top: 2px;
+        }
+
+        .login-box h2 {
+            margin: 18px 0 14px;
+            color: #333;
+            font-size: 22px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px 14px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .login-box input:focus {
+            border-color: #d4a017;
+        }
+
+        .login-box button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #3A1608;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .login-box button[type="submit"]:hover {
+            background: #b8860b;
+        }
+
+        .bottom-text {
+            margin-top: 14px;
+            font-size: 14px;
+            color: #c00;
+        }
+
+        .bottom-text a {
+            color: #111;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .login-box {
+                padding: 24px 18px;
+            }
+        }
+        .privacy-box{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.privacy-box input{
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.privacy-box label{
+    color: #555;
+}
+
+.privacy-box a{
+    color: blue;
+    text-decoration: none;
+}
+
+.privacy-box a:hover{
+    text-decoration: underline;
+}
+
+
+@media (max-width: 600px){
+
+    .privacy-box{
+        font-size: 12px;
+        align-items: flex-start;
+    }
+
+    .privacy-box input{
+        width: 14px;
+        height: 14px;
+    }
+}
+    
+/* ── CART PANEL ── */
+.cart-overlay{
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.45); z-index:4000;
+}
+.cart-overlay.open{ display:block; }
+.cart-panel{
+    position:fixed; top:0; right:-420px; width:380px; max-width:95vw;
+    height:100vh; background:#fff; z-index:4001;
+    box-shadow:-4px 0 24px rgba(0,0,0,0.2);
+    display:flex; flex-direction:column;
+    transition:right 0.32s cubic-bezier(.4,0,.2,1);
+}
+.cart-panel.open{ right:0; }
+.cart-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 20px; background:#3A1608; color:#fff;
+}
+.cart-header h3{ margin:0; font-size:18px; }
+.cart-header-close{
+    background:none; border:none; color:#fff; font-size:24px;
+    cursor:pointer; line-height:1; padding:0 4px;
+}
+.cart-items{
+    flex:1; overflow-y:auto; padding:12px 16px;
+}
+.cart-empty{
+    text-align:center; padding:60px 20px;
+    color:#999; font-size:15px;
+}
+.cart-empty span{ font-size:48px; display:block; margin-bottom:12px; }
+.cart-item{
+    display:flex; gap:12px; align-items:center;
+    border-bottom:1px solid #f0f0f0; padding:10px 0;
+}
+.cart-item img{
+    width:56px; height:56px; object-fit:contain;
+    background:#f8f8f8; border-radius:8px; padding:4px; flex-shrink:0;
+}
+.cart-item-info{ flex:1; min-width:0; }
+.cart-item-name{
+    font-size:13px; font-weight:700; color:#3A1608;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.cart-item-brand{ font-size:11px; color:#888; margin-top:1px; }
+.cart-item-price{ font-size:13px; font-weight:bold; color:#1b5e20; margin-top:4px; }
+.cart-item-qty{
+    display:flex; align-items:center; gap:6px; margin-top:5px;
+}
+.cart-item-qty button{
+    width:24px; height:24px; border-radius:50%;
+    border:1.5px solid #3A1608; background:#fff;
+    font-size:14px; cursor:pointer; color:#3A1608;
+    line-height:1; transition:background 0.15s,color 0.15s;
+    display:flex; align-items:center; justify-content:center;
+}
+.cart-item-qty button:hover{ background:#3A1608; color:#fff; }
+.cart-item-qty span{ font-size:14px; font-weight:bold; min-width:20px; text-align:center; }
+.cart-item-remove{
+    background:none; border:none; color:#cc0000; font-size:18px;
+    cursor:pointer; padding:0 4px; flex-shrink:0;
+}
+.cart-footer{
+    padding:16px 20px; border-top:2px solid #f0f0f0; background:#fafafa;
+}
+.cart-total{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:16px; font-weight:bold; color:#3A1608; margin-bottom:14px;
+}
+.cart-checkout{
+    width:100%; padding:13px; background:#3A1608; color:#fff;
+    border:none; border-radius:10px; font-size:16px; font-weight:bold;
+    cursor:pointer; transition:background 0.2s;
+}
+.cart-checkout:hover{ background:#5c2e00; }
+.cart-btn{ position:relative; }
+.cart-count{
+    position:absolute; top:-7px; right:-9px;
+    background:#f0a503; color:#fff; border-radius:50%;
+    width:18px; height:18px; font-size:10px; font-weight:bold;
+    display:flex; align-items:center; justify-content:center;
+    line-height:1;
+}
+</style>
+</head>
+<body>
+
+
+<header>
+    <div class="logo-group">
+        <img src="logo.png.jpeg" height="55" width="58" alt="Amoha Logo">
+        <div class="logo">Amoha Dairy</div>
+    </div>
+
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-right">
+        <nav id="main-nav">
+            <a href="front.html">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="login.html">Login</a>
+                        <a href="myorders.html" onclick="order()">myorders</a>
+
+            <a href="contactus.html">Contact Us</a>
+        </nav>
+        <a href="#" class="btn" style="text-decoration:none;">Download</a>
+        <a href="cart.html" class="cart-btn" title="Cart">
+            🛒 <span class="cart-count" id="cartCount">0</span>
+        </a>
+                    
+
+    </div>
+</header>
+
+
+<div class="nut">
+    <div class="login-box">
+        <div class="brand">
+            Amoha
+            <span>Dairy</span>
+        </div>
+
+        <h2>Login</h2>
+
+        <form action="front.html"><input type="tel" placeholder="Enter username"  maxlength="25"  required>
+            <input type="tel" placeholder="Enter Phone Number"  maxlength="10" pattern="[6-9][0-9]{9}" required>
+
+            <input type="email" placeholder="Enter Email"  required>
+            <input type="password" placeholder="Enter Password"  maxlength="8"required>
+            
+            <div class="privacy-box">
+    <input type="checkbox" id="privacy" required>
+
+    <label for="privacy">
+        I agree to the 
+        <a href="Termsandconditions.html">Privacy Policy and terms</a>
+    </label>
+</div>
+            <button type="submit"  onclick="showM()">login</button>
+
+        </form>
+
+        <div class="bottom-text">
+            Don't have an account? <a href="sign up.html">Sign Up</a>
+        </div>
+    </div>
+</div>
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-col footer-brand">
+            <div class="footer-logo-group">
+                <img src="logo.png.jpeg" height="50" width="52" alt="Amoha Logo">
+                <span class="footer-logo-name">Amoha Dairy</span>
+            </div>
+            <p class="footer-tagline">Pure. Fresh. Everyday.<br>Delivered straight from the farm to your doorstep.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="front.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="myorders.html">myorders</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="sign up.html">Sign Up</a></li>
+                <li><a href="contactus.html">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Our Products</h4>
+            <ul>
+                <li><a href="products.html">Fresh Milk</a></li>
+                <li><a href="products.html">Paneer</a></li>
+                <li><a href="products.html">Curd</a></li>
+                <li><a href="products.html">Butter &amp; Ghee</a></li>
+                <li><a href="products.html">Lassi &amp; Buttermilk</a></li>
+                <li><a href="products.html">Flavoured Milk</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <ul class="footer-contact">
+                <li>📍 Rajahmundry, Andhra Pradesh</li>
+                <li>📞 <a href="tel:+919876543210">+91 9876543210</a></li>
+                <li>✉ <a href="mailto:amohadairy@gmail.com">amohadairy@gmail.com</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="Termsandconditions.html">Terms &amp; Conditions</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-social">
+        <span>Follow Us</span>
+        <a href="#" class="social-icon whatsapp" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" class="social-icon facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="social-icon twitter" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" class="social-icon google" aria-label="Google"><i class="fa-brands fa-google"></i></a>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Amoha Dairy. All Rights Reserved.</p>
+    </div>
+</footer>
+
+
+<script>
+
+    function showM(){
+        localStorage.setItem('amohaLoggedIn', 'true');
+        alert("Login successful!");
+    }
+    function toggleNav() {
+        document.querySelector('.nav-right').classList.toggle('open');
+    }
+
+    /* ── CART LOGIC ── */
+    var cart = JSON.parse(localStorage.getItem('amohaCart') || '[]');
+
+    function saveCart(){ localStorage.setItem('amohaCart', JSON.stringify(cart)); }
+
+    function renderCart(){
+        var items = document.getElementById('cartItems');
+        var empty = document.getElementById('cartEmpty');
+        var total = 0;
+        var countEls = document.querySelectorAll('.cart-count');
+        var totalItems = cart.reduce(function(s,i){ return s + i.qty; }, 0);
+        countEls.forEach(function(el){ el.textContent = totalItems; });
+
+        if(cart.length === 0){
+            items.innerHTML = '';
+            items.appendChild(empty || createEmptyMsg());
+            document.getElementById('cartTotal').textContent = '\u20B90';
+            return;
+        }
+        if(empty) empty.style.display = 'none';
+        var html = '';
+        cart.forEach(function(item, idx){
+            var price = parseInt((item.price || '0').replace(/[^\d]/g,'')) || 0;
+            total += price * item.qty;
+            html += '<div class="cart-item">' +
+                '<img src="' + item.img + '" alt="' + item.name + '">' +
+                '<div class="cart-item-info">' +
+                    '<div class="cart-item-name">' + item.name + '</div>' +
+                    '<div class="cart-item-brand">' + item.brand + ' &bull; ' + item.volume + '</div>' +
+                    '<div class="cart-item-price">' + item.price + '</div>' +
+                    '<div class="cart-item-qty">' +
+                        '<button onclick="changeQty(' + idx + ',-1)">&#x2212;</button>' +
+                        '<span>' + item.qty + '</span>' +
+                        '<button onclick="changeQty(' + idx + ',1)">&#x2B;</button>' +
+                    '</div>' +
+                '</div>' +
+                '<button class="cart-item-remove" onclick="removeItem(' + idx + ')" title="Remove">&#x1F5D1;</button>' +
+            '</div>';
+        });
+        items.innerHTML = html;
+        document.getElementById('cartTotal').textContent = '\u20B9' + total;
+    }
+
+    function createEmptyMsg(){
+        var d = document.createElement('div');
+        d.className = 'cart-empty'; d.id = 'cartEmpty';
+        d.innerHTML = '<span>\uD83D\uDED2</span>Your cart is empty.<br>Add items to get started!';
+        return d;
+    }
+
+    function addToCart(name, brand, price, img, volume){
+        var idx = cart.findIndex(function(i){ return i.name === name && i.volume === volume; });
+        if(idx > -1){ cart[idx].qty++; }
+        else { cart.push({ name:name, brand:brand, price:price, img:img, volume:volume, qty:1 }); }
+        saveCart(); renderCart();
+        openCart();
+    }
+
+    function changeQty(idx, delta){
+        cart[idx].qty += delta;
+        if(cart[idx].qty <= 0) cart.splice(idx, 1);
+        saveCart(); renderCart();
+    }
+
+    function removeItem(idx){
+        cart.splice(idx, 1);
+        saveCart(); renderCart();
+    }
+
+    function openCart(){
+        document.getElementById('cartPanel').classList.add('open');
+        document.getElementById('cartOverlay').classList.add('open');
+        renderCart();
+    }
+
+    function closeCart(){
+        document.getElementById('cartPanel').classList.remove('open');
+        document.getElementById('cartOverlay').classList.remove('open');
+    }
+
+    function checkout(){
+        if(cart.length === 0){ alert('Your cart is empty!'); return; }
+        alert('Please login to proceed to checkout!');
+    }
+
+    // Init count on load
+    document.addEventListener('DOMContentLoaded', function(){ renderCart(); });
+     function doLogout()
+        {
+localStorage.removeitem('isLoggedIn');
+alert('you have been logged out')
+window.location.href='front.html';
+        }
+        if(localStorage.getItem('isloggedIn'))
+        
+            var cb=Document.getElementById(cr)
+    function order(){
+        if(login==success)
+    {
+        return window.location.href='myorders.html';
+    }
+    else{
+      alert('please login first to view your orders')  
+        
+    }
+    }        
+    
+</script>
+
+<!-- CART OVERLAY & PANEL -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+    <div class="cart-header">
+        <h3>&#x1F6D2; My Cart</h3>
+        <button class="cart-header-close" onclick="closeCart()" aria-label="Close cart">&#x2715;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+        <div class="cart-empty" id="cartEmpty">
+            <span>&#x1F6D2;</span>
+            Your cart is empty.<br>Add items to get started!
+        </div>
+    </div>
+    <div class="cart-footer">
+        <div class="cart-total">
+            <span>Total</span>
+            <span id="cartTotal">&#x20B9;0</span>
+        </div>
+        <button class="cart-checkout" onclick="checkout()">Proceed to Checkout</button>
+    </div>
+</div>
+</body>
+</html>
+
+
