@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Cart — Amoha Dairy</title>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+body { background:#f5f5f5; padding-top:90px; }
+
+/* PAGE TITLE */
+.cart-page-title {
+    text-align:center;
+    padding:28px 20px 14px;
+    font-size:28px;
+    font-weight:bold;
+    color:#3A1608;
+}
+.cart-page-title span { color:#f0a503; }
+
+/* BREADCRUMB */
+.breadcrumb {
+    text-align:center;
+    font-size:13px;
+    color:#888;
+    margin-bottom:10px;
+}
+.breadcrumb a { color:#3A1608; text-decoration:none; font-weight:600; }
+.breadcrumb a:hover { text-decoration:underline; }
+
+/* MAIN LAYOUT */
+.cart-wrapper {
+    max-width:1100px;
+    margin:0 auto;
+    padding:16px 16px 60px;
+    display:flex;
+    gap:24px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+}
+
+/* LEFT — ITEMS */
+.cart-items-section {
+    flex:1 1 600px;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 2px 14px rgba(0,0,0,0.08);
+    overflow:hidden;
+}
+.cart-items-header {
+    background:#3A1608;
+    color:#fff;
+    padding:16px 22px;
+    font-size:16px;
+    font-weight:bold;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.cart-items-header .clear-btn {
+    background:none;
+    border:1.5px solid rgba(255,255,255,0.6);
+    color:#fff;
+    padding:5px 14px;
+    border-radius:20px;
+    font-size:12px;
+    cursor:pointer;
+    transition:background 0.2s;
+}
+.cart-items-header .clear-btn:hover { background:rgba(255,255,255,0.18); }
+
+.cart-list { padding:8px 16px; }
+
+/* EMPTY STATE */
+.cart-empty-state {
+    text-align:center;
+    padding:64px 20px;
+    color:#aaa;
+}
+.cart-empty-state .empty-icon { font-size:70px; margin-bottom:16px; }
+.cart-empty-state h3 { font-size:22px; color:#666; margin-bottom:8px; }
+.cart-empty-state p  { font-size:14px; margin-bottom:22px; color:#999; }
+.cart-empty-state a  {
+    display:inline-block;
+    background:#3A1608;
+    color:#fff;
+    padding:12px 32px;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:15px;
+    transition:background 0.2s;
+}
+.cart-empty-state a:hover { background:#f0a503; }
+
+/* ITEM ROW */
+.cart-item-row {
+    display:flex;
+    gap:14px;
+    align-items:center;
+    padding:14px 0;
+    border-bottom:1px solid #f0f0f0;
+    animation:fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+.cart-item-row:last-child { border-bottom:none; }
+
+.cart-item-row img {
+    width:80px; height:80px;
+    object-fit:contain;
+    background:#f8f8f8;
+    border-radius:10px;
+    padding:6px;
+    flex-shrink:0;
+    border:1px solid #eee;
+}
+.cart-item-details { flex:1; min-width:0; }
+.item-name {
+    font-size:15px; font-weight:700; color:#3A1608;
+    margin-bottom:2px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.item-brand { font-size:12px; color:#888; margin-bottom:4px; }
+.item-volume {
+    font-size:11px; color:#555;
+    background:#f0ebe3; display:inline-block;
+    padding:2px 9px; border-radius:10px; margin-bottom:6px;
+}
+.item-price { font-size:16px; font-weight:bold; color:#1b5e20; }
+
+/* QTY */
+.qty-controls { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+.qty-controls button {
+    width:32px; height:32px; border-radius:50%;
+    border:2px solid #3A1608; background:#fff;
+    font-size:18px; cursor:pointer; color:#3A1608;
+    display:flex; align-items:center; justify-content:center;
+    transition:background 0.15s, color 0.15s; font-weight:bold;
+}
+.qty-controls button:hover { background:#3A1608; color:#fff; }
+.qty-num { font-size:16px; font-weight:bold; min-width:28px; text-align:center; color:#3A1608; }
+
+.item-subtotal {
+    font-size:15px; font-weight:bold; color:#3A1608;
+    min-width:72px; text-align:right; flex-shrink:0;
+}
+.remove-btn {
+    background:none; border:none; color:#cc0000;
+    font-size:20px; cursor:pointer; padding:0 4px; flex-shrink:0;
+    transition:transform 0.15s;
+}
+.remove-btn:hover { transform:scale(1.2); }
+
+/* RIGHT — SUMMARY */
+.order-summary {
+    flex:0 0 310px;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 2px 14px rgba(0,0,0,0.08);
+    overflow:hidden;
+    position:sticky;
+    top:100px;
+}
+.summary-header {
+    background:#3A1608; color:#fff;
+    padding:16px 22px; font-size:16px; font-weight:bold;
+}
+.summary-body { padding:20px; }
+
+.summary-row {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:9px 0; font-size:14px; color:#555;
+    border-bottom:1px solid #f5f5f5;
+}
+.summary-row:last-of-type { border-bottom:none; }
+.summary-row .value { font-weight:600; color:#333; }
+.summary-row.total {
+    font-size:18px; font-weight:bold; color:#3A1608;
+    padding-top:14px; margin-top:6px;
+    border-top:2px solid #eee; border-bottom:none;
+}
+.summary-row.total .value { color:#1b5e20; font-size:20px; }
+
+/* PROMO */
+.promo-label { font-size:13px; font-weight:600; color:#3A1608; margin:14px 0 6px; }
+.promo-box { display:flex; gap:8px; margin-bottom:4px; }
+.promo-box input {
+    flex:1; padding:9px 12px; border:1.5px solid #ddd;
+    border-radius:8px; font-size:13px; outline:none;
+    transition:border-color 0.2s;
+}
+.promo-box input:focus { border-color:#3A1608; }
+.promo-box button {
+    padding:9px 14px; background:#f0a503; color:#fff;
+    border:none; border-radius:8px; font-size:13px;
+    font-weight:bold; cursor:pointer; transition:background 0.2s;
+}
+.promo-box button:hover { background:#d4920a; }
+.promo-msg { font-size:11px; min-height:16px; margin-bottom:6px; }
+.promo-msg.success { color:#1b5e20; }
+.promo-msg.error   { color:#cc0000; }
+
+.checkout-btn {
+    width:100%; padding:14px; background:#3A1608; color:#fff;
+    border:none; border-radius:30px; font-size:16px; font-weight:bold;
+    cursor:pointer; margin-top:14px;
+    transition:background 0.2s, transform 0.15s; letter-spacing:0.5px;
+}
+.checkout-btn:hover { background:#5c2e00; transform:scale(1.02); }
+
+.continue-btn {
+    display:block; text-align:center; margin-top:12px;
+    color:#3A1608; font-size:13px; text-decoration:none; font-weight:600;
+}
+.continue-btn:hover { text-decoration:underline; }
+.safe-note { text-align:center; font-size:11px; color:#aaa; margin-top:10px; }
+.safe-note i { color:#1b5e20; margin-right:4px; }
+
+/* TRUST BADGES */
+.trust-badges {
+    display:flex; justify-content:center; gap:20px;
+    flex-wrap:wrap; padding:20px 16px 0;
+    max-width:700px; margin:0 auto;
+}
+.trust-badge {
+    display:flex; flex-direction:column; align-items:center;
+    gap:4px; font-size:12px; color:#555;
+}
+.trust-badge i { font-size:22px; color:#3A1608; }
+
+@media(max-width:700px) {
+    .order-summary { flex:1 1 100%; position:static; }
+    .cart-item-row img { width:60px; height:60px; }
+    .item-subtotal { display:none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo-group">
+        <img src="logo.png.jpeg" height="55" width="58" alt="Amoha Logo">
+        <div class="logo">Amoha Dairy</div>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+    </button>
+    <div class="nav-right">
+        <nav id="main-nav">
+            <a href="front.html">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="login.html">Login</a>
+                        <a href="myorders.html">myorders</a>
+
+            <a href="contactus.html">Contact Us</a>
+        </nav>
+        <a href="#" class="btn" style="text-decoration:none;" onclick="alert('Please go to Play Store')">Download</a>
+        <a href="cart.html" class="cart-btn" title="My Cart">
+            🛒 <span class="cart-count" id="cartCount">0</span>
+        </a>
+        
+    </div>
+</header>
+
+<div class="cart-page-title">🛒 My <span>Cart</span></div>
+<div class="breadcrumb">
+    <a href="front.html">Products</a> › My Cart
+</div>
+
+<!-- TRUST BADGES -->
+<div class="trust-badges">
+    <div class="trust-badge"><i class="fa fa-truck"></i>Free Delivery</div>
+    <div class="trust-badge"><i class="fa fa-shield-halved"></i>Secure Payment</div>
+    <div class="trust-badge"><i class="fa-solid fa-leaf"></i>Fresh Products</div>
+</div>
+
+<div class="cart-wrapper">
+
+    <!-- LEFT: Items -->
+    <div class="cart-items-section">
+        <div class="cart-items-header">
+            <span id="itemCountLabel">0 Items in Cart</span>
+            <button class="clear-btn" onclick="clearCart()">Clear All</button>
+        </div>
+        <div class="cart-list" id="cartList"></div>
+    </div>
+
+    <!-- RIGHT: Summary -->
+    <div class="order-summary">
+        <div class="summary-header"> Payment Details</div>
+        <div class="summary-body">
+            <div class="summary-row">
+                <span class="label">MRP</span>
+                <span class="value" id="subtotal">₹0</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Subtotal</span>
+                <span class="value" id="subtotal">₹0</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Delivery</span>
+                <span class="value" style="color:#1b5e20;">FREE 🚚</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Discount</span>
+                <span class="value" id="discount" style="color:#cc0000;">− ₹0</span>
+            </div>
+            <div class="summary-row total">
+                <span class="label">Total</span>
+                <span class="value" id="grandTotal">₹0</span>
+            </div>
+
+            <div class="promo-label">🏷️ Have a promo code?</div>
+            <div class="promo-box">
+                <input type="text" id="promoInput" placeholder="Enter code (AMOHA10)">
+                <button onclick="applyPromo()">Apply</button>
+            </div>
+            <div class="promo-msg" id="promoMsg"></div>
+
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout →</button>
+            <a href="front.html" class="continue-btn">← Continue Shopping</a>
+            <p class="safe-note"><i class="fa fa-lock"></i> 100% Secure &amp; Encrypted Checkout</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-col footer-brand">
+            <div class="footer-logo-group">
+                <img src="logo.png.jpeg" height="50" width="52" alt="Amoha Logo">
+                <span class="footer-logo-name">Amoha Dairy</span>
+            </div>
+            <p class="footer-tagline">Pure. Fresh. Everyday.<br>Delivered straight from the farm to your doorstep.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="front.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="products.html">Products</a></li>
+                 <li><a href="myorders.html">myorders</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="contactus.html">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <ul class="footer-contact">
+                <li>📍 Rajahmundry, Andhra Pradesh</li>
+                <li>📞 <a href="tel:+919876543210">+91 9876543210</a></li>
+                <li>✉ <a href="mailto:amohadairy@gmail.com">amohadairy@gmail.com</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="Termsandconditions.html">Terms &amp; Conditions</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Amoha Dairy. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script>
+    function toggleNav() {
+        document.querySelector('.nav-right').classList.toggle('open');
+    }
+
+    var cart = JSON.parse(localStorage.getItem('amohaCart') || '[]');
+    var promoApplied = false;
+
+    function saveCart() {
+        localStorage.setItem('amohaCart', JSON.stringify(cart));
+    }
+
+    function getSubtotal() {
+        return cart.reduce(function(sum, item) {
+            var p = parseInt((item.price || '0').replace(/[^\d]/g, '')) || 0;
+            return sum + p * item.qty;
+        }, 0);
+    }
+
+    function renderPage() {
+        var list       = document.getElementById('cartList');
+        var countLabel = document.getElementById('itemCountLabel');
+        var cartCountEl= document.getElementById('cartCount');
+        var totalItems = cart.reduce(function(s, i) { return s + i.qty; }, 0);
+
+        if (cartCountEl) cartCountEl.textContent = totalItems;
+        countLabel.textContent = totalItems + ' Item' + (totalItems !== 1 ? 's' : '') + ' in Cart';
+
+        /* ── EMPTY STATE ── */
+        if (cart.length === 0) {
+            list.innerHTML =
+                '<div class="cart-empty-state">' +
+                    '<div class="empty-icon">🛒</div>' +
+                    '<h3>Your cart is empty!</h3>' +
+                    '<p>Looks like you have not added anything yet.</p>' +
+                    '<a href="products.html">Shop Now</a>' +
+                '</div>';
+            updateSummary(0);
+            return;
+        }
+
+        /* ── ITEM ROWS ── */
+        var html = '';
+        cart.forEach(function(item, idx) {
+            var price    = parseInt((item.price || '0').replace(/[^\d]/g, '')) || 0;
+            var lineTotal= price * item.qty;
+            html +=
+                '<div class="cart-item-row">' +
+                    '<img src="' + item.img + '" alt="' + item.name + '" onerror="this.src=\'milk.jpeg\'">' +
+                    '<div class="cart-item-details">' +
+                        '<div class="item-name">'   + item.name               + '</div>' +
+                        '<div class="item-brand">'  + (item.brand  || '')     + '</div>' +
+                        '<div class="item-volume">' + (item.volume || '')     + '</div>' +
+                        '<div class="item-price">'  + (item.price  || '')     + '</div>' +
+                    '</div>' +
+                    '<div class="qty-controls">' +
+                        '<button onclick="changeQty(' + idx + ',-1)">−</button>' +
+                        '<span class="qty-num">' + item.qty + '</span>' +
+                        '<button onclick="changeQty(' + idx + ',1)">+</button>' +
+                    '</div>' +
+                    '<div class="item-subtotal">₹' + lineTotal + '</div>' +
+                    '<button class="remove-btn" onclick="removeItem(' + idx + ')" title="Remove">🗑</button>' +
+                '</div>';
+        });
+        list.innerHTML = html;
+        updateSummary(getSubtotal());
+    }
+
+    function updateSummary(subtotal) {
+        var discount = promoApplied ? Math.floor(subtotal * 0.10) : 0;
+        var grand    = subtotal - discount;
+        document.getElementById('subtotal').textContent   = '₹' + subtotal;
+        document.getElementById('discount').textContent   = '− ₹' + discount;
+        document.getElementById('grandTotal').textContent = '₹' + grand;
+    }
+
+    function changeQty(idx, delta) {
+        cart[idx].qty += delta;
+        if (cart[idx].qty <= 0) cart.splice(idx, 1);
+        saveCart();
+        renderPage();
+    }
+
+    function removeItem(idx) {
+        cart.splice(idx, 1);
+        saveCart();
+        renderPage();
+    }
+
+    function clearCart() {
+        if (cart.length === 0) return;
+        if (confirm('Remove all items from cart?')) {
+            cart = [];
+            saveCart();
+            renderPage();
+        }
+    }
+
+    function applyPromo() {
+        var code = document.getElementById('promoInput').value.trim().toUpperCase();
+        var msg  = document.getElementById('promoMsg');
+        if (code === 'AMOHA10') {
+            promoApplied = true;
+            msg.textContent = '✅ Promo applied! 10% discount added.';
+            msg.className   = 'promo-msg success';
+        } else {
+            promoApplied = false;
+            msg.textContent = '❌ Sorry! Invalid coupon code.';
+            msg.className   = 'promo-msg error';
+        }
+        updateSummary(getSubtotal());
+    }
+
+    function checkout() {
+        if (cart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        else{
+            alert('Fresh goodness is on its way🌱,your order is confirmed!🎉')
+        }
+    
+    }
+
+    /* ── LOGIN GUARD ── */
+    if (!localStorage.getItem('amohaLoggedIn')) {
+        alert('Please login first to view your cart!');
+        window.location.href = 'login.html';
+    }
+
+    renderPage();
+
+</script>
+</body>
+</html>

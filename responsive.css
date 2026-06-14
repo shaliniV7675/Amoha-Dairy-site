@@ -1,0 +1,831 @@
+/* ===== GLOBAL RESET & BASE ===== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    padding-top: 84px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ===== SHARED NAVBAR ===== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 40px;
+    background: #faebd5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    flex-wrap: wrap;
+    gap: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.logo-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #5b381e;
+    white-space: nowrap;
+}
+
+/* Right-side group: nav links + download button */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: #3A1608;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+nav a:hover {
+    background: rgba(58,22,8,0.1);
+}
+
+/* Hamburger toggle — hidden on desktop */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 4px;
+}
+
+.nav-toggle span {
+    display: block;
+    width: 26px;
+    height: 3px;
+    background: #3A1608;
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+/* ===== SHARED BUTTON ===== */
+.btn {
+    padding: 10px 24px;
+    background: #3A1608;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.btn:hover {
+    background: #5c2e00;
+}
+
+.explore-btn {
+    padding: 10px 24px;
+    border: 2px solid #c89b5b;
+    background: white;
+    color: #5a3200;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.explore-btn:hover {
+    background: #c89b5b;
+    color: white;
+}
+
+/* ===== PRODUCT CARD GRID (shared) ===== */
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    padding: 30px 40px;
+}
+
+.card {
+    background: #F5EBDD;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.card img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.card h2, .card h3 {
+    margin-top: 8px;
+    font-size: 15px;
+    color: #222;
+}
+
+.offer {
+    color: #444;
+    margin-top: 4px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.offer span {
+    color: red;
+    margin-right: 4px;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablet */
+@media (max-width: 900px) {
+    header {
+        padding: 12px 20px;
+    }
+
+    .products {
+        padding: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    header {
+        padding: 10px 16px;
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+
+    .nav-right {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .nav-right.open {
+        display: flex;
+    }
+
+    nav {
+        flex-direction: column;
+        width: 100%;
+        background: #faebd5;
+        padding: 6px 0;
+        gap: 2px;
+    }
+
+    nav a {
+        padding: 8px 16px;
+        font-size: 16px;
+        border-bottom: 1px solid rgba(58,22,8,0.1);
+        width: 100%;
+    }
+
+    .nav-right .btn {
+        margin: 6px 16px 10px;
+    }
+
+    .products {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 380px) {
+    .products {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+    background: #3A1608;
+    color: #f5e6d3;
+    padding: 50px 40px 0;
+    margin-top: 40px;
+}
+
+.footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 36px;
+    justify-content: space-between;
+    padding-bottom: 36px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+.footer-col {
+    flex: 1 1 160px;
+    min-width: 140px;
+}
+
+/* Brand column */
+.footer-brand {
+    flex: 1 1 220px;
+}
+
+.footer-logo-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.footer-logo-group img {
+    border-radius: 6px;
+}
+
+.footer-logo-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #f0a503;
+}
+
+.footer-tagline {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #e0c9b0;
+}
+
+/* Column headings */
+.footer-col h4 {
+    font-size: 15px;
+    font-weight: bold;
+    color: #f0a503;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Links list */
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-col ul li a,
+.footer-col ul li {
+    font-size: 14px;
+    color: #e0c9b0;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-col ul li a:hover {
+    color: #f0a503;
+}
+
+/* Contact list */
+.footer-contact li {
+    font-size: 14px;
+    color: #e0c9b0;
+    line-height: 1.6;
+}
+
+/* Bottom bar */
+.footer-bottom {
+    text-align: center;
+    padding: 16px 0;
+    font-size: 13px;
+    color: #c4a882;
+}
+
+/* Footer responsive */
+@media (max-width: 768px) {
+    .site-footer {
+        padding: 36px 20px 0;
+    }
+
+    .footer-inner {
+        gap: 24px;
+    }
+
+    .footer-col {
+        flex: 1 1 140px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-inner {
+        flex-direction: column;
+        gap: 28px;
+    }
+
+    .footer-col {
+        flex: unset;
+        width: 100%;
+    }
+}
+
+/* ===== FOOTER SOCIAL ICONS ===== */
+.footer-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 22px 0 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.footer-social span {
+    font-size: 14px;
+    color: #c4a882;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-right: 4px;
+}
+
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 17px;
+    color: #fff;
+    text-decoration: none;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.social-icon:hover {
+    transform: translateY(-3px);
+    opacity: 0.85;
+}
+
+.social-icon.whatsapp  { background: #25D366; }
+.social-icon.facebook  { background: #1877F2; }
+.social-icon.twitter   { background: #000000; }
+.social-icon.google    { background: #EA4335; }
+
+/* ===================================================
+   COMPREHENSIVE RESPONSIVE UPGRADES
+   =================================================== */
+
+/* ── Global images & text ── */
+* {
+    max-width: 100%;
+}
+
+h1, h2, h3, h4, h5 {
+    word-break: break-word;
+}
+
+/* ── Hero section ── */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column;
+        padding: 24px 20px 16px;
+        gap: 20px;
+    }
+
+    .hero-text h1 {
+        font-size: clamp(28px, 8vw, 48px);
+    }
+
+    .hero-text p {
+        font-size: 15px;
+    }
+
+    .hero-img img {
+        max-width: 100%;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn, .explore-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* ── Section title ── */
+@media (max-width: 600px) {
+    .section-title {
+        padding: 10px 16px 0;
+        font-size: 20px;
+    }
+}
+
+/* ── Scroll wrapper (front page product row) ── */
+@media (max-width: 600px) {
+    .scroll-wrapper {
+        gap: 4px;
+        padding: 12px 0 20px;
+    }
+
+    .scroll-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 22px;
+    }
+}
+
+/* ── About page ── */
+@media (max-width: 768px) {
+    .photo {
+        padding: 30px 16px;
+        min-height: auto;
+        gap: 16px;
+    }
+
+    .photo h1 {
+        font-size: 22px;
+    }
+
+    .photo h2, .photo p {
+        font-size: 14px;
+    }
+}
+
+/* ── Contact page ── */
+@media (max-width: 600px) {
+    .men {
+        padding: 20px 12px;
+        min-height: auto;
+    }
+
+    .contact-container {
+        padding: 18px 14px;
+        max-width: 100%;
+    }
+
+    .contact-container h1 {
+        font-size: 20px;
+    }
+
+    .submit-btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+/* ── Login page ── */
+@media (max-width: 600px) {
+    .nut {
+        padding: 20px 12px;
+        min-height: auto;
+    }
+
+    .login-box {
+        padding: 20px 16px;
+        max-width: 100%;
+    }
+
+    .login-box .brand {
+        font-size: 20px;
+    }
+
+    .login-box h2 {
+        font-size: 18px;
+    }
+
+    .login-box input {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+    .login-box button[type="submit"] {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+/* ── Products page grid ── */
+@media (max-width: 768px) {
+    .search-box {
+        padding: 16px 16px 0;
+    }
+
+    .search-box input {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card .content {
+        padding: 8px 2px 2px;
+    }
+
+    .card h2 {
+        font-size: 13px;
+    }
+
+    .price {
+        font-size: 13px;
+    }
+
+    .cart {
+        font-size: 12px;
+        padding: 7px 10px;
+    }
+}
+
+/* ── Card detail pages (cardmilk, cardcurd, etc.) ── */
+@media (max-width: 768px) {
+    .page-heading {
+        font-size: 22px;
+        padding: 16px 16px 4px;
+    }
+
+    .page-sub {
+        font-size: 13px;
+        padding: 0 16px;
+    }
+
+    .brand-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        padding: 10px 16px 24px !important;
+        gap: 14px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-grid {
+        grid-template-columns: 1fr !important;
+        padding: 10px 12px 20px !important;
+    }
+
+    .brand-card img {
+        height: 160px !important;
+    }
+
+    .brand-info h3 {
+        font-size: 15px !important;
+    }
+
+    .brand-info .desc {
+        font-size: 12px !important;
+    }
+
+    .brand-info .rate {
+        font-size: 14px !important;
+    }
+
+    .add-btn {
+        font-size: 13px !important;
+        padding: 8px !important;
+    }
+}
+
+/* ── Inline card pages (cardmilk style) ── */
+@media (max-width: 768px) {
+    body .products {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    body .products {
+        grid-template-columns: 1fr;
+        padding: 12px;
+    }
+
+    .card .title {
+        font-size: 16px !important;
+    }
+
+    .card .price .new {
+        font-size: 22px !important;
+    }
+
+    .card .volume {
+        font-size: 14px !important;
+    }
+
+    .card .add-btn {
+        padding: 6px 14px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* ── Sign up page ── */
+@media (max-width: 600px) {
+    .signup-box {
+        width: 92% !important;
+        padding: 20px 16px !important;
+        margin: 20px auto;
+    }
+
+    .signup-box h1 {
+        font-size: 22px;
+    }
+
+    .signup-btn {
+        font-size: 16px !important;
+    }
+}
+
+/* ── Terms & Conditions page ── */
+@media (max-width: 600px) {
+    .container {
+        padding: 16px !important;
+    }
+
+    h1 {
+        font-size: 24px !important;
+    }
+
+    h2 {
+        font-size: 18px !important;
+    }
+
+    p, ul li {
+        font-size: 14px !important;
+    }
+}
+
+/* ── Privacy policy page ── */
+@media (max-width: 600px) {
+    .privacy-container {
+        padding: 20px 16px !important;
+    }
+
+    .privacy-container h1 {
+        font-size: 24px !important;
+    }
+
+    .privacy-container h3 {
+        font-size: 16px !important;
+    }
+
+    .privacy-container p {
+        font-size: 14px !important;
+    }
+}
+
+/* ── Footer social icons ── */
+@media (max-width: 480px) {
+    .footer-social {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 16px 0 14px;
+    }
+
+    .social-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 15px;
+    }
+}
+
+/* ── Milk brands page ── */
+@media (max-width: 768px) {
+    .brand-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 10px 16px 24px;
+        gap: 14px;
+    }
+}
+
+@media (max-width: 420px) {
+    .brand-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ── General utility ── */
+@media (max-width: 600px) {
+    .page-end {
+        height: 20px;
+    }
+
+    .site-footer {
+        padding: 28px 16px 0;
+    }
+
+    .footer-bottom {
+        font-size: 12px;
+    }
+}
+
+/* ── Cart Button ── */
+.cart-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #3A1608;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 24px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+    margin-left: 10px;
+}
+.cart-btn:hover {
+    background: #f0a503;
+    color: #fff;
+    transform: scale(1.08);
+}
+.cart-count {
+    background: #f0a503;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+.cart-btn:hover .cart-count {
+    background: #fff;
+    color: #3A1608;
+}
+
+/* ── Logout Button ── */
+.logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #cc0000;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 24px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
+    margin-left: 8px;
+}
+.logout-btn:hover {
+    background: #990000;
+    transform: scale(1.05);
+}

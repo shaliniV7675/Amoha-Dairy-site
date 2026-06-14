@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders — Amoha Dairy</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            background: #faebd5;
+        }
+
+        /* ── PAGE TITLE ── */
+        .orders-page-title {
+            text-align: center;
+            padding: 28px 20px 6px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #3A1608;
+        }
+
+        .orders-page-title span { color: #f0a503; }
+
+        .breadcrumb {
+            text-align: center;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: #3A1608;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        /* ── ORDERS WRAPPER ── */
+        .orders-wrapper {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 0 16px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* ── ORDER CARD ── */
+        .order-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.09);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.13);
+        }
+
+        /* Card header strip */
+        .order-card-header {
+            background: #3A1608;
+            color: #f5e6d3;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .order-card-header .order-id {
+            font-weight: bold;
+            color: #f0a503;
+            font-size: 13px;
+        }
+
+        /* Card body */
+        .order-card-body {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .order-card-body img {
+            width: 130px;
+            height: 130px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: #f8f5f0;
+            border: 1px solid #eee;
+            padding: 8px;
+            flex-shrink: 0;
+        }
+
+        .order-details {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .order-details h2 {
+            font-size: 18px;
+            color: #3A1608;
+            margin: 0;
+        }
+
+        .order-details .order-meta {
+            font-size: 13px;
+            color: #888;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .order-details .order-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Status badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            width: fit-content;
+        }
+
+        .status-badge.delivered {
+            background: #e8f5e9;
+            color: #1b5e20;
+        }
+
+        .status-badge.pending {
+            background: #fff8e1;
+            color: #e65100;
+        }
+
+        .status-badge.processing {
+            background: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        /* Star rating */
+        .stars {
+            font-size: 22px;
+            color: gold;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .stars .empty { color: #ddd; }
+
+        .rating-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 2px;
+        }
+
+        /* Action buttons */
+        .order-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .buy-again-btn {
+            background: #3A1608;
+            color: #fff;
+            border: none;
+            padding: 9px 22px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+
+        .buy-again-btn:hover {
+            background: #5c2e00;
+            transform: scale(1.05);
+        }
+
+        .track-btn {
+            background: none;
+            color: #3A1608;
+            border: 2px solid #3A1608;
+            padding: 9px 22px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .track-btn:hover {
+            background: #3A1608;
+            color: #fff;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-orders {
+            text-align: center;
+            padding: 80px 20px;
+            color: #aaa;
+        }
+
+        .empty-orders .empty-icon { font-size: 72px; margin-bottom: 16px; }
+        .empty-orders h3 { font-size: 22px; color: #666; margin-bottom: 8px; }
+        .empty-orders p  { font-size: 14px; margin-bottom: 24px; color: #999; }
+        .empty-orders a  {
+            display: inline-block;
+            background: #3A1608;
+            color: #fff;
+            padding: 12px 32px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+
+        .empty-orders a:hover { background: #f0a503; }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 600px) {
+            .order-card-body img {
+                width: 90px;
+                height: 90px;
+            }
+
+            .order-details h2 {
+                font-size: 16px;
+            }
+
+            .orders-page-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+    <div class="logo-group">
+        <img src="logo.png.jpeg" height="55" width="58" alt="Amoha Logo">
+        <div class="logo">Amoha Dairy</div>
+    </div>
+
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-right">
+        <nav id="main-nav">
+            <a href="front.html">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="myorders.html">myorders</a>
+
+            
+            <a href="contactus.html">Contact Us</a>
+        </nav>
+        <a href="#" class="btn" style="text-decoration:none;" onclick="showMi()">Download</a>
+        <a href="cart.html" class="cart-btn" title="Cart">
+            🛒 <span class="cart-count" id="cartCount">0</span>
+        </a>
+        <button class="logout-btn" style="background-color: #3A1608;" onclick="doLogout()">Logout</button>
+    </div>
+</header>
+
+<!-- ── PAGE TITLE ── -->
+<div class="orders-page-title">My <span>Orders</span></div>
+<div class="breadcrumb">
+    <a href="front.html">Home</a> › My Orders
+</div>
+
+<!-- ── ORDERS LIST ── -->
+<div class="orders-wrapper">
+
+    <!-- Order 1 -->
+    <div class="order-card">
+        <div class="order-card-header">
+            <span>📦 1 item | ₹85</span>
+            <span>Ordered: 8 June 2026</span>
+        </div>
+        <div class="order-card-body">
+            <img src="milktmistmango.jpg" alt="Milky Mist Mango Lassi">
+            <div class="order-details">
+                <h2>Milky Mist Mango Lassi</h2>
+                <div class="order-meta">
+                    <span><i class="fa-solid fa-box"></i> Qty: 1</span>
+                    <span><i class="fa-solid fa-indian-rupee-sign"></i> ₹85</span>
+                    <span><i class="fa-solid fa-truck"></i> Free Delivery</span>
+                </div>
+                <div class="status-badge delivered">
+                    <i class="fa-solid fa-circle-check"></i> Delivered on 10 June 2026
+                </div>
+                <div class="rating-label">Your Rating:</div>
+                <div class="stars">★★★★★</div>
+                <div class="order-actions">
+                    <button class="buy-again-btn" onclick="window.location.href='cardlassi.html'">
+                        <i class="fa-solid fa-rotate-right"></i> Buy Again
+                    </button>
+                    <button class="track-btn" onclick="alert('Order delivered successfully!')">
+                        <i class="fa-solid fa-location-dot"></i> Track Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order 2 -->
+    <div class="order-card">
+        <div class="order-card-header">
+        
+            <span>📦 1 item | ₹120</span>
+            <span>Ordered: 3 June 2026</span>
+        </div>
+        <div class="order-card-body">
+            <img src="kwalgulab.jpg" alt="Kwality Gulab Jamun Ice Cream">
+            <div class="order-details">
+                <h2>Kwality Gulab Jamun Ice Cream</h2>
+                <div class="order-meta">
+                    <span><i class="fa-solid fa-box"></i> Qty: 1</span>
+                    <span><i class="fa-solid fa-indian-rupee-sign"></i> ₹120</span>
+                    <span><i class="fa-solid fa-truck"></i> Free Delivery</span>
+                </div>
+                <div class="status-badge delivered">
+                    <i class="fa-solid fa-circle-check"></i> Delivered on 5 June 2026
+                </div>
+                <div class="rating-label">Your Rating:</div>
+                <div class="stars">★★★★★</div>
+                <div class="order-actions">
+                    <button class="buy-again-btn" onclick="window.location.href='cardicecreames.html'">
+                        <i class="fa-solid fa-rotate-right"></i> Buy Again
+                    </button>
+                    <button class="track-btn" onclick="alert('Order delivered successfully!')">
+                        <i class="fa-solid fa-location-dot"></i> Track Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order 3 -->
+    <div class="order-card">
+        <div class="order-card-header">
+            
+            <span>📦 1 item | ₹599</span>
+            <span>Ordered: 29 May 2026</span>
+        </div>
+        <div class="order-card-body">
+            <img src="amulghee1lit.png" alt="Amul Ghee 1 Litre">
+            <div class="order-details">
+                <h2>Amul Pure Ghee — 1 Litre</h2>
+                <div class="order-meta">
+                    <span><i class="fa-solid fa-box"></i> Qty: 1</span>
+                    <span><i class="fa-solid fa-indian-rupee-sign"></i> ₹599</span>
+                    <span><i class="fa-solid fa-truck"></i> Free Delivery</span>
+                </div>
+                <div class="status-badge delivered">
+                    <i class="fa-solid fa-circle-check"></i> Delivered on 31 May 2026
+                </div>
+                <div class="rating-label">Your Rating:</div>
+                <div class="stars">★★★★★</div>
+                <div class="order-actions">
+                    <button class="buy-again-btn" onclick="window.location.href='cardghee.html'">
+                        <i class="fa-solid fa-rotate-right"></i> Buy Again
+                    </button>
+                    <button class="track-btn" onclick="alert('Order delivered successfully!')">
+                        <i class="fa-solid fa-location-dot"></i> Track Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-col footer-brand">
+            <div class="footer-logo-group">
+                <img src="logo.png.jpeg" height="50" width="52" alt="Amoha Logo">
+                <span class="footer-logo-name">Amoha Dairy</span>
+            </div>
+            <p class="footer-tagline">Pure. Fresh. Everyday.<br>Delivered straight from the farm to your doorstep.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="front.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="contactus.html">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Our Products</h4>
+            <ul>
+                <li><a href="cardmilk.html">Fresh Milk</a></li>
+                <li><a href="cardcurd.html">Curd</a></li>
+                <li><a href="cardbutter.html">Butter &amp; Ghee</a></li>
+                <li><a href="cardlassi.html">Lassi &amp; Buttermilk</a></li>
+                <li><a href="cardicecreames.html">Ice Creams</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <ul class="footer-contact">
+                <li>📍 Rajahmundry, Andhra Pradesh</li>
+                <li>📞 <a href="tel:+919876543210">+91 9876543210</a></li>
+                <li>✉ <a href="mailto:amohadairy@gmail.com">amohadairy@gmail.com</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="Termsandconditions.html">Privacy Policy</a></li>
+                <li><a href="Termsandconditions.html">Terms &amp; Conditions</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-social">
+        <span>Follow Us</span>
+        <a href="#" class="social-icon whatsapp" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" class="social-icon facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="social-icon twitter" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" class="social-icon google" aria-label="Google"><i class="fa-brands fa-google"></i></a>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Amoha Dairy. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script>
+    function toggleNav() {
+        document.querySelector('.nav-right').classList.toggle('open');
+    }
+
+    function showMi() {
+        alert('Please go to Play Store');
+    }
+
+    function doLogout() {
+        localStorage.removeItem('amohaLoggedIn');
+        alert('You have been logged out.');
+        window.location.href = 'login.html';
+    }
+
+    /* Update cart count badge from localStorage */
+    document.addEventListener('DOMContentLoaded', function () {
+        var cart = JSON.parse(localStorage.getItem('amohaCart') || '[]');
+        var total = cart.reduce(function (s, i) { return s + i.qty; }, 0);
+        var el = document.getElementById('cartCount');
+        if (el) el.textContent = total;
+    });
+
+    /* Login guard */
+    if (!localStorage.getItem('amohaLoggedIn')) {
+        alert('Please login first to view your orders!');
+        window.location.href = 'login.html';
+    }
+</script>
+
+</body>
+</html>

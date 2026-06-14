@@ -1,0 +1,234 @@
+﻿   <!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milk Products</title>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f5f5f5;
+    padding:20px;
+    padding-top: 100px;
+}
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    padding:15px;
+}
+
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:contain;
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:10px;
+}
+
+.volume{
+    font-size:18px;
+    font-weight:bold;
+}
+
+.add-btn{
+    background:white;
+    color:green;
+    border:2px solid green;
+    padding:8px 20px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.price{
+    margin-top:10px;
+}
+
+.price .new{
+    font-size:32px;
+    font-weight:bold;
+}
+
+.price .old{
+    color:gray;
+    text-decoration:line-through;
+    margin-left:5px;
+}
+
+.title{
+    margin-top:10px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.tag{
+    display:inline-block;
+    background:#fff4d6;
+    padding:5px 12px;
+    border-radius:8px;
+    margin-top:10px;
+}
+
+.rating{
+    margin-top:10px;
+    color:gold;
+}
+
+.delivery{
+    margin-top:8px;
+    color:#666;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo-group">
+        <img src="logo.png.jpeg" height="55" width="58" alt="Amoha Logo">
+        <div class="logo">Amoha Dairy</div>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+    </button>
+    <div class="nav-right">
+        <nav id="main-nav">
+            <a href="front.html">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="login.html">Login</a>
+            <a href="contactus.html">Contact Us</a>
+        </nav>
+        <a href="#" class="btn" style="text-decoration:none;">Download</a>
+    </div>
+</header>
+
+<div class="products">
+
+    <div class="card">
+        <img src="WhatsApp22 Image 2026-06-01 at 4.14.21 PM.jpeg" alt="">
+        
+        <div class="top">
+            <span class="volume">200g</span>
+            <button class="add-btn" onclick="alert('Please login first')">ADD</button>
+        </div>
+
+        <div class="price">
+            <span class="new">₹104</span>
+            <span class="old">₹135</span>
+        </div>
+
+        <div class="title">
+            MilkyMist paneer
+        </div>
+
+        <div class="tag">good carbs</div>
+
+        <div class="rating">
+            ⭐⭐⭐⭐⭐ 29,140
+        </div>
+
+        <div class="delivery">
+            🕒 8 mins
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="WhatsApp31 Image 2026-06-01 at 4.14.22 PM.jpeg" alt="Heritage Toned Milk">
+        
+        <div class="top">
+            <span class="volume">200g</span>
+            <button class="add-btn" onclick="alert('Please login first')">ADD</button>
+        </div>
+
+        <div class="price">
+            <span class="new">₹90</span>
+            <span class="old">₹100</span>
+        </div>
+
+        <div class="title">Heritage fresh paneer</div>
+        <div class="tag">Toned</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 86,746</div>
+        <div class="delivery">🕒 8 mins</div>
+    </div>
+
+
+
+    <!-- Heritage Green Card -->
+    <div class="card green-card">
+        <img src="WhatsApp Image 2026-06-01 at 4.14.21 PM.jpeg" alt="Heritage Green Milk">
+        
+        <div class="top">
+            <span class="volume">200g</span>
+            <button class="add-btn green-btn" onclick="alert('Please login first')">ADD</button>
+        </div>
+
+        <div class="price">
+            <span class="new">₹120</span>
+            <span class="old">₹130</span>
+        </div>
+
+        <div class="title">Mooz Tofu</div>
+        <div class="tag green-tag">Fresh & Natural</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 45,210</div>
+        <div class="delivery">🕒 8 mins</div>
+    </div>
+
+    <div class="card">
+        <img src="paneer.jpeg" alt="Amoha Full Cream Mil">
+        
+        <div class="top">
+            <span class="volume">200g</span>
+            <button class="add-btn" onclick="alert('Please login first')">ADD</button>
+        </div>
+
+        <div class="price">
+            <span class="new">₹100</span>
+            <span class="old">₹120</span>
+        </div>
+
+        <div class="title">Malai paneer</div>
+        <div class="tag">fresh</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 12,300</div>
+        <div class="delivery">🕒 8 mins</div>
+    </div>
+
+</div>
+
+<script>
+    
+    function doLogout() {
+        localStorage.removeItem('amohaLoggedIn');
+        alert('You have been logged out.');
+        window.location.href = 'login.html';
+    }
+    function toggleNav() {
+        document.querySelector('.nav-right').classList.toggle('open');
+    }
+</script>
+</body>
+</html>

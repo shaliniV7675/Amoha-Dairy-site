@@ -1,0 +1,737 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghee Products</title>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{ margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
+
+body{ background:#f5f5f5; padding:10px; padding-top:100px; }
+
+.products{
+    display:grid !important;
+    grid-template-columns:repeat(8, 1fr) !important;
+    grid-template-rows:repeat(3, auto) !important;
+    gap:8px;
+    padding:0 6px;
+    width:100%;
+}
+@media(max-width:900px) { .products{ grid-template-columns:repeat(4,1fr) !important; } }
+@media(max-width:600px) { .products{ grid-template-columns:repeat(2,1fr) !important; } }
+@media(max-width:380px) { .products{ grid-template-columns:1fr !important; } }
+
+.card{
+    background:#fff;
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 1px 5px rgba(0,0,0,0.1);
+    padding:7px;
+    transition:box-shadow 0.2s;
+    min-width:0;
+    width:100%;
+}
+.card:hover{ box-shadow:0 4px 12px rgba(0,0,0,0.15); }
+
+.card img{
+    width:100%;
+    height:150px;
+    object-fit:contain;
+    background:#F5EBDD;
+    border-radius:5px;
+    padding:4px;
+    display:block;
+    transition:transform 0.25s;
+}
+.card:hover img{ transform:scale(1.05); }
+
+.brand-badge{
+    display:inline-block;
+    font-size:7.5px;
+    font-weight:700;
+    letter-spacing:0.4px;
+    text-transform:uppercase;
+    padding:1px 5px;
+    border-radius:3px;
+    margin-top:4px;
+}
+.badge-amul      { background:#e8f5e9; color:#1b5e20; }
+.badge-patanjali { background:#fff9c4; color:#f57f17; }
+.badge-gowardhan { background:#fce4ec; color:#880e4f; }
+.badge-nandini   { background:#f3e5f5; color:#6a1b9a; }
+.badge-milkymist { background:#e0f7fa; color:#006064; }
+.badge-heritage  { background:#fff0dc; color:#b85c00; }
+.badge-mother    { background:#e3f2fd; color:#0d47a1; }
+.badge-saras     { background:#f1f8e9; color:#33691e; }
+
+.top{ display:flex; justify-content:space-between; align-items:center; margin-top:4px; }
+.volume{ font-size:8.5px; font-weight:bold; color:#555; }
+
+.add-btn{
+    background:#F5EBDD;
+    color:green;
+    border:1px solid green;
+    padding:2px 5px;
+    border-radius:4px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:8px;
+    white-space:nowrap;
+    transition:background 0.15s,color 0.15s;
+}
+.add-btn:hover{ background:green; color:#F5EBDD; }
+
+.price{ margin-top:3px; }
+.price .new{ font-size:12px; font-weight:bold; }
+.price .old{ color:gray; text-decoration:line-through; margin-left:2px; font-size:8px; }
+
+.title{
+    margin-top:3px;
+    font-size:9.5px;
+    font-weight:bold;
+    line-height:1.3;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.tag{
+    display:inline-block;
+    background:#F5EBDD;
+    padding:1px 5px;
+    border-radius:3px;
+    margin-top:3px;
+    font-size:7.5px;
+    font-weight:bold;
+    color:#7a5c00;
+}
+.rating{ margin-top:2px; color:gold; font-size:7.5px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.delivery{ margin-top:2px; color:#666; font-size:7.5px; }
+
+#scrollTopBtn{
+    display:none; position:fixed; bottom:30px; right:30px;
+    background:#3A1608; color:#F5EBDD; border:none; border-radius:50%;
+    width:42px; height:42px; font-size:18px; cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3); transition:background 0.2s; z-index:999;
+}
+#scrollTopBtn:hover{ background:#f0a503; }
+/* ── ADD / QTY CONTROLS ── */
+.add-btn {
+    background:#fff;
+    color:green;
+    border:1.5px solid green;
+    padding:2px 8px;
+    border-radius:4px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:8px;
+    white-space:nowrap;
+    transition:background 0.15s,color 0.15s;
+}
+.add-btn:hover { background:green; color:#fff; }
+
+.qty-wrap {
+    display:none;
+    align-items:center;
+    gap:4px;
+}
+.qty-wrap.show { display:flex; }
+.qty-dec, .qty-inc {
+    width:20px; height:20px;
+    border-radius:50%;
+    border:1.5px solid green;
+    background:#fff; color:green;
+    font-size:14px; font-weight:bold;
+    cursor:pointer; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    transition:background 0.15s,color 0.15s;
+    flex-shrink:0;
+}
+.qty-dec:hover, .qty-inc:hover { background:green; color:#fff; }
+.qty-num-display {
+    font-size:11px; font-weight:bold;
+    min-width:16px; text-align:center; color:#333;
+}
+
+/* ── PRODUCT MODAL ── */
+.modal-overlay{
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.55); z-index:3000;
+    justify-content:center; align-items:center; padding:16px;
+}
+.modal-overlay.active{ display:flex; }
+.modal-box{
+    background:#F5EBDD; border-radius:14px; width:100%; max-width:360px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.25); overflow:hidden;
+    animation:popIn 0.2s ease;
+}
+@keyframes popIn{
+    from{ transform:scale(0.85); opacity:0; }
+    to  { transform:scale(1);    opacity:1; }
+}
+.modal-img{
+    width:100%; height:180px; object-fit:contain;
+    background:#F5EBDD; padding:12px;
+}
+.modal-body{ padding:16px 18px 20px; }
+.modal-brand{
+    display:inline-block; font-size:10px; font-weight:700;
+    letter-spacing:0.5px; text-transform:uppercase;
+    padding:2px 8px; border-radius:4px;
+    background:#F5EBDD; color:#1b5e20; margin-bottom:6px;
+}
+.modal-title{ font-size:16px; font-weight:bold; color:#3A1608; margin-bottom:8px; }
+.modal-desc{ font-size:12px; color:#555; line-height:1.6; margin-bottom:10px; }
+.modal-meta{
+    display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;
+}
+.modal-meta span{
+    background:#F5EBDD; border-radius:6px;
+    padding:4px 10px; font-size:11px; color:#444; font-weight:600;
+}
+.modal-price{ font-size:20px; font-weight:bold; color:#1b5e20; margin-bottom:14px; }
+.modal-price s{ font-size:13px; color:#aaa; margin-left:6px; font-weight:400; }
+.modal-actions{ display:flex; gap:10px; }
+.modal-add{
+    flex:1; padding:10px; background:#3A1608; color:#F5EBDD;
+    border:none; border-radius:8px; font-size:14px;
+    cursor:pointer; font-weight:bold; transition:background 0.2s;
+}
+.modal-add:hover{ background:#5c2e00; }
+.modal-close{
+    padding:10px 16px; background:#f0e6d3; color:#3A1608;
+    border:none; border-radius:8px; font-size:14px;
+    cursor:pointer; transition:background 0.2s;
+}
+.modal-close:hover{ background:#F5EBDD; }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo-group">
+        <img src="logo.png.jpeg" height="55" width="58" alt="Amoha Logo">
+        <div class="logo">Amoha Dairy</div>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+    </button>
+    <div class="nav-right">
+        <nav id="main-nav">
+            <a href="front.html">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="login.html">Login</a>
+                        <a href="myorders.html">myorders</a>
+
+            <a href="contactus.html">Contact Us</a>
+        </nav>
+        <a href="#" class="btn" style="text-decoration:none;">Download</a>
+        <a href="cart.html" class="cart-btn" title="Cart">
+            🛒 <span class="cart-count">0</span>
+        </a>
+        <button class="logout-btn" onclick="doLogout()" style="background-color: #3A1608;"title="Logout">Logout</button>
+    </div>
+</header>
+
+<h1 style="text-align:center;padding:16px 0 4px;font-size:22px;color:#3A1608;">✨ Pure Ghee</h1>
+<p style="text-align:center;color:#777;font-size:13px;margin-bottom:14px;">Golden, aromatic &amp; traditionally made — the soul of Indian cooking</p>
+
+<div class="products">
+
+    <!-- ROW 1 -->
+
+    <!-- 1. Amul Pure Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="samul500.jpg" alt="Amul Pure Ghee 500g">
+        <span class="brand-badge badge-amul">Amul</span>
+        <div class="top"><span class="volume">500 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹290</span><span class="old">₹310</span></div>
+        <div class="title">Amul Pure Ghee</div>
+        <div class="tag">Buffalo Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 88,200</div>
+        <div class="delivery">🕒 10 mins</div>
+    </div>
+
+    <!-- 2. Amul Pure Ghee 1L -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="amulghee1lit.jpeg" alt="Amul Pure Ghee 1L">
+        <span class="brand-badge badge-amul">Amul</span>
+        <div class="top"><span class="volume">1 litre</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹560</span><span class="old">₹600</span></div>
+        <div class="title">Amul Pure Ghee 1L</div>
+        <div class="tag">Buffalo Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 1,04,500</div>
+        <div class="delivery">🕒 10 mins</div>
+    </div>
+
+    <!-- 3. Patanjali Cow Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="WhatsApp Image 2026-06-01 at 4.42.47PM.jpeg" alt="Patanjali Cow Ghee 500g">
+        <span class="brand-badge badge-patanjali">Grb</span>
+        <div class="top"><span class="volume">500 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹320</span><span class="old">₹350</span></div>
+        <div class="title">Grb Ghee</div>
+        <div class="tag">Desi Cow</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 41,800</div>
+        <div class="delivery">🕒 11 mins</div>
+    </div>
+
+    <!-- 4. Patanjali Cow Ghee 1L -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="WhatsApp Image 2026-06-01 at 4.42.40 PM.jpeg" alt="Patanjali Cow Ghee 1L">
+        <span class="brand-badge badge-patanjali">Vijaya</span>
+        <div class="top"><span class="volume">100g</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹60</span><span class="old">₹80</span></div>
+        <div class="title">vijaya ghee</div>
+        <div class="tag">Desi Cow</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 29,600</div>
+        <div class="delivery">🕒 11 mins</div>
+    </div>
+
+    <!-- 5. Gowardhan Pure Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="govardhan500.png" alt="Gowardhan Ghee 500g">
+        <span class="brand-badge badge-gowardhan">Gowardhan</span>
+        <div class="top"><span class="volume">500 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹310</span><span class="old">₹340</span></div>
+        <div class="title">Gowardhan Pure Ghee</div>
+        <div class="tag">Pure Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 29,300</div>
+        <div class="delivery">🕒 10 mins</div>
+    </div>
+
+    <!-- 6. Gowardhan Pure Ghee 1L -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="govar1litre.jpg" alt="Gowardhan Ghee 1L">
+        <span class="brand-badge badge-gowardhan">Gowardhan</span>
+        <div class="top"><span class="volume">1 litre</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹590</span><span class="old">₹640</span></div>
+        <div class="title">Gowardhan Pure Ghee 1L</div>
+        <div class="tag">Pure Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 18,400</div>
+        <div class="delivery">🕒 10 mins</div>
+    </div>
+
+    <!-- 7. Nandini Pure Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="gnandhughee500.jpg" alt="Nandini Pure Ghee 500g">
+        <span class="brand-badge badge-nandini">Nandini</span>
+        <div class="top"><span class="volume">500 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹270</span><span class="old">₹295</span></div>
+        <div class="title">Nandini Pure Ghee</div>
+        <div class="tag">Pure Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 17,900</div>
+        <div class="delivery">🕒 11 mins</div>
+    </div>
+
+    <!-- 8. Nandini Pure Ghee 1L -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="gnan1lit.jpg" alt="Nandini Pure Ghee 1L">
+        <span class="brand-badge badge-nandini">Nandini</span>
+        <div class="top"><span class="volume">1 litre</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹520</span><span class="old">₹560</span></div>
+        <div class="title">Nandini Pure Ghee 1L</div>
+        <div class="tag">Pure Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 11,200</div>
+        <div class="delivery">🕒 11 mins</div>
+    </div>
+
+    <!-- ROW 2 -->
+
+    <!-- 9. Heritage Cow Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="gher500g.jpg" alt="Heritage Cow Ghee 500g">
+        <span class="brand-badge badge-heritage">Heritage</span>
+        <div class="top"><span class="volume">500 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹260</span><span class="old">₹285</span></div>
+        <div class="title">Heritage Cow Ghee</div>
+        <div class="tag">Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 33,600</div>
+        <div class="delivery">🕒 9 mins</div>
+    </div>
+
+    <!-- 10. Heritage Cow Ghee 1L -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="gherighee1lit.jpg" alt="Heritage Cow Ghee 1L">
+        <span class="brand-badge badge-heritage">Heritage</span>
+        <div class="top"><span class="volume">1 litre</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹510</span><span class="old">₹550</span></div>
+        <div class="title">Heritage Cow Ghee 1L</div>
+        <div class="tag">Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 21,400</div>
+        <div class="delivery">🕒 9 mins</div>
+    </div>
+
+    <!-- 11. Mother Dairy Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="gmother500.jpg" alt="Mother Dairy Ghee 500g">
+        <span class="brand-badge badge-mother">Mother Dairy</span>
+        <div class="top"><span class="volume">500 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹295</span><span class="old">₹320</span></div>
+        <div class="title">Mother Dairy Cow Ghee</div>
+        <div class="tag">Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 54,200</div>
+        <div class="delivery">🕒 9 mins</div>
+    </div>
+
+    <!-- 12. Mother Dairy Ghee 1L -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="gmother1lit.jpg" alt="Mother Dairy Ghee 1L">
+        <span class="brand-badge badge-mother">Mother Dairy</span>
+        <div class="top"><span class="volume">1 litre</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹575</span><span class="old">₹620</span></div>
+        <div class="title">Mother Dairy Cow Ghee 1L</div>
+        <div class="tag">Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 31,600</div>
+        <div class="delivery">🕒 9 mins</div>
+    </div>
+
+    <!-- 13. MilkyMist Pure Ghee 200g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="milkymist200g.jpg" alt="milkymist image">
+        <span class="brand-badge badge-milkymist">MilkyMist</span>
+        <div class="top"><span class="volume">200 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹140</span><span class="old">₹158</span></div>
+        <div class="title">MilkyMist Pure Ghee</div>
+        <div class="tag">Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 12,600</div>
+        <div class="delivery">🕒 9 mins</div>
+    </div>
+
+    <!-- 14. MilkyMist Pure Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="gmilky500g.jpg" alt="MilkyMist Ghee 500g">
+        <span class="brand-badge badge-milkymist">MilkyMist</span>
+        <div class="top"><span class="volume">500 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹310</span><span class="old">₹340</span></div>
+        <div class="title">MilkyMist Pure Ghee 500g</div>
+        <div class="tag">Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 8,900</div>
+        <div class="delivery">🕒 9 mins</div>
+    </div>
+
+    <!-- 15. Saras Pure Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="saras500.jpg" alt="Saras Pure Ghee 500g">
+        <span class="brand-badge badge-saras">Saras</span>
+        <div class="top"><span class="volume">500 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹280</span><span class="old">₹300</span></div>
+        <div class="title">Saras Pure Ghee</div>
+        <div class="tag">Cooperative</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 18,600</div>
+        <div class="delivery">🕒 10 mins</div>
+    </div>
+
+    <!-- 16. Saras Pure Ghee 1L -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="sgrb1lit.jpg" alt="Saras Pure Ghee 1L">
+        
+        <span class="brand-badge badge-saras">Saras</span>
+        <div class="top"><span class="volume">1 litre</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹545</span><span class="old">₹585</span></div>
+        <div class="title">Saras Pure Ghee 1L</div>
+        <div class="tag">Cooperative</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 11,400</div>
+        <div class="delivery">🕒 10 mins</div>
+    </div>
+
+    <!-- ROW 3 -->
+
+    <!-- 17. GRB Cow Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="sgrb200.jpg" alt="GRB Cow Ghee 500g">
+        <span class="brand-badge badge-heritage">GRB</span>
+        <div class="top"><span class="volume">200 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹120</span><span class="old">₹130</span></div>
+        <div class="title">GRB Desi Cow Ghee</div>
+        <div class="tag">A2 Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 21,400</div>
+        <div class="delivery">🕒 8 mins</div>
+    </div>
+
+    <!-- 18. GRB Cow Ghee 1L -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="sgrb1lit.jpg" alt="GRB Cow Ghee 1L">
+        <span class="brand-badge badge-heritage">GRB</span>
+        <div class="top"><span class="volume">1 litre</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹565</span><span class="old">₹610</span></div>
+        <div class="title">GRB Desi Cow Ghee 1L</div>
+        <div class="tag">A2 Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 13,700</div>
+        <div class="delivery">🕒 8 mins</div>
+    </div>
+
+    <!-- 19. Hatsun Cow Ghee 200g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="hatsun1litghe.jpg" alt="Hatsun Cow Ghee 200g">
+        <span class="brand-badge badge-milkymist">Hatsun</span>
+        <div class="top"><span class="volume">200 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹125</span><span class="old">₹140</span></div>
+        <div class="title">Hatsun Cow Ghee</div>
+        <div class="tag">Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 16,100</div>
+        <div class="delivery">🕒 8 mins</div>
+    </div>
+
+    <!-- 20. Hatsun Cow Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="hatsun500.jpg" alt="Hatsun Cow Ghee 500g">
+        <span class="brand-badge badge-milkymist">Hatsun</span>
+        <div class="top"><span class="volume">500 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹285</span><span class="old">₹310</span></div>
+        <div class="title">Hatsun Cow Ghee 500g</div>
+        <div class="tag">Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 9,800</div>
+        <div class="delivery">🕒 8 mins</div>
+    </div>
+
+    <!-- 21. Organic India A2 Ghee 250g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="jerceyghee200.jpg" alt="Organic India A2 Ghee 250g">
+        <span class="brand-badge badge-saras">Jercey</span>
+        <div class="top"><span class="volume">200 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹180</span><span class="old">₹200</span></div>
+        <div class="title">jercey ghee</div>
+        <div class="tag">Organic</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 8,200</div>
+        <div class="delivery">🕒 10 mins</div>
+    </div>
+
+    <!-- 22. Amoha Pure Cow Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="jerceygh500.jpg" alt="Amoha Pure Cow Ghee 500g">
+        <span class="brand-badge badge-amul">Jercey</span>
+        <div class="top"><span class="volume">500 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹400</span><span class="old">₹420</span></div>
+        <div class="title">Jercey Cow Ghee</div>
+        <div class="tag">Cow Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 14,500</div>
+        <div class="delivery">🕒 8 mins</div>
+    </div>
+
+    <!-- 23. Visakha Dairy Ghee 500g -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="jercey1l.jpg" alt="Visakha Dairy Ghee 500g">
+        <span class="brand-badge badge-nandini">Jercey</span>
+        <div class="top"><span class="volume">1000 ml</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹900</span><span class="old">₹280</span></div>
+        <div class="title">Jercey cow Ghee</div>
+        <div class="tag"> Ghee</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 19,700</div>
+        <div class="delivery">🕒 9 mins</div>
+    </div>
+
+    <!-- 24. Amul Ghee Tin 1L -->
+    <div class="card" onclick="openModal(this)" style="cursor:pointer;">
+        <img src="amultyin.jpg" alt="Amul Pure Ghee Tin 1L">
+        <span class="brand-badge badge-amul">Amul</span>
+        <div class="top"><span class="volume">1L Tin</span><button class="add-btn" onclick="event.stopPropagation(); addToCartFromCard(this)">ADD</button><div class="qty-wrap"><button class="qty-dec" onclick="event.stopPropagation(); changeCardQty(this,-1)">-</button><span class="qty-num-display">1</span><button class="qty-inc" onclick="event.stopPropagation(); changeCardQty(this,1)">+</button></div></div>
+        <div class="price"><span class="new">₹570</span><span class="old">₹610</span></div>
+        <div class="title">Amul Pure Ghee Tin</div>
+        <div class="tag">Tin Pack</div>
+        <div class="rating">⭐⭐⭐⭐⭐ 76,300</div>
+        <div class="delivery">🕒 10 mins</div>
+    </div>
+
+</div>
+
+<button id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">▲</button>
+
+
+<!-- PRODUCT DESCRIPTION MODAL -->
+<div class="modal-overlay" id="productModal" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+        <img class="modal-img" id="modalImg" src="" alt="">
+        <div class="modal-body">
+            <span class="modal-brand" id="modalBrand"></span>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-desc" id="modalDesc"></div>
+            <div class="modal-meta">
+                <span id="modalVolume"></span>
+                <span id="modalTag"></span>
+                <span id="modalRating"></span>
+                <span id="modalDelivery"></span>
+            </div>
+            <div class="modal-price">
+                <span id="modalNewPrice"></span>
+                <s id="modalOldPrice"></s>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-add" onclick="addToCartFromModal()"> Add to Cart</button>
+                <button class="modal-close" onclick="document.getElementById('productModal').classList.remove('active')">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+    function doLogout() {
+        localStorage.removeItem('amohaLoggedIn');
+        alert('You have been logged out.');
+        window.location.href = 'login.html';
+    }
+    function toggleNav() {
+        document.querySelector('.nav-right').classList.toggle('open');
+    }
+
+    window.onscroll = function() {
+        var btn = document.getElementById('scrollTopBtn');
+        if (btn) btn.style.display = (window.scrollY > 300) ? 'block' : 'none';
+    };
+
+    /* ── MODAL ── */
+    var _lastModalCard = null;
+
+    function openModal(card) {
+        _lastModalCard = card;
+        var img      = card.querySelector('img');
+        var badge    = card.querySelector('.brand-badge');
+        var title    = card.querySelector('.title');
+        var newP     = card.querySelector('.price .new');
+        var oldP     = card.querySelector('.price .old');
+        var volume   = card.querySelector('.volume');
+        var tag      = card.querySelector('.tag');
+        var rating   = card.querySelector('.rating');
+        var delivery = card.querySelector('.delivery');
+
+        document.getElementById('modalImg').src              = img      ? img.src                                        : '';
+        document.getElementById('modalImg').alt              = img      ? img.alt                                        : '';
+        document.getElementById('modalBrand').textContent    = badge    ? badge.textContent.trim()                       : '';
+        document.getElementById('modalTitle').textContent    = title    ? title.textContent.trim()                       : '';
+        document.getElementById('modalNewPrice').textContent = newP     ? newP.textContent.trim()                        : '';
+        document.getElementById('modalOldPrice').textContent = oldP     ? oldP.textContent.trim()                        : '';
+        document.getElementById('modalVolume').textContent   = volume   ? 'Pack: ' + volume.textContent.trim()           : '';
+        document.getElementById('modalTag').textContent      = tag      ? 'Type: ' + tag.textContent.trim()              : '';
+        document.getElementById('modalRating').textContent   = rating   ? rating.textContent.trim()                      : '';
+        document.getElementById('modalDelivery').textContent = delivery ? delivery.textContent.trim()                    : '';
+
+        var t  = title  ? title.textContent.trim()  : '';
+        var tg = tag    ? tag.textContent.trim()    : '';
+        var br = badge  ? badge.textContent.trim()  : '';
+        document.getElementById('modalDesc').textContent =
+            'A premium ' + tg + ' product by ' + br + '. ' + t +
+            ' is carefully prepared to deliver the finest quality dairy experience. ' +
+            'No added preservatives. Rich in nutrients and freshness guaranteed.';
+
+        document.getElementById('productModal').classList.add('active');
+    }
+
+    function closeModal(e) {
+        if (e.target === document.getElementById('productModal')) {
+            document.getElementById('productModal').classList.remove('active');
+        }
+    }
+
+    /* ── CART ── */
+    function getCart() {
+        return JSON.parse(localStorage.getItem('amohaCart') || '[]');
+    }
+
+    function saveCartData(c) {
+        localStorage.setItem('amohaCart', JSON.stringify(c));
+        var total = c.reduce(function(s, i) { return s + i.qty; }, 0);
+        document.querySelectorAll('.cart-count').forEach(function(el) { el.textContent = total; });
+    }
+
+    function addToCartFromCard(btn) {
+        var card   = btn.closest('.card');
+        var img    = card.querySelector('img');
+        var title  = card.querySelector('.title');
+        var badge  = card.querySelector('.brand-badge');
+        var newP   = card.querySelector('.price .new');
+        var volume = card.querySelector('.volume');
+        var wrap   = card.querySelector('.qty-wrap');
+        var numEl  = card.querySelector('.qty-num-display');
+
+        var name   = title  ? title.textContent.trim()  : 'Product';
+        var brand  = badge  ? badge.textContent.trim()  : '';
+        var price  = newP   ? newP.textContent.trim()   : '';
+        var imgSrc = img    ? img.src                   : '';
+        var vol    = volume ? volume.textContent.trim() : '';
+
+        var c   = getCart();
+        var idx = c.findIndex(function(i) { return i.name === name && i.volume === vol; });
+        if (idx > -1) { c[idx].qty++; }
+        else { c.push({ name: name, brand: brand, price: price, img: imgSrc, volume: vol, qty: 1 }); idx = c.length - 1; }
+        saveCartData(c);
+
+        /* Show +/- beside ADD button — do NOT hide the ADD button */
+        wrap.classList.add('show');
+        numEl.textContent = c[idx].qty;
+    }
+
+    function changeCardQty(btn, delta) {
+        var card   = btn.closest('.card');
+        var title  = card.querySelector('.title');
+        var volume = card.querySelector('.volume');
+        var wrap   = card.querySelector('.qty-wrap');
+        var numEl  = card.querySelector('.qty-num-display');
+
+        var name = title  ? title.textContent.trim()  : '';
+        var vol  = volume ? volume.textContent.trim() : '';
+
+        var c   = getCart();
+        var idx = c.findIndex(function(i) { return i.name === name && i.volume === vol; });
+        if (idx === -1) return;
+
+        c[idx].qty += delta;
+        if (c[idx].qty <= 0) {
+            c.splice(idx, 1);
+            saveCartData(c);
+            wrap.classList.remove('show');
+            numEl.textContent = '0';
+        } else {
+            saveCartData(c);
+            numEl.textContent = c[idx].qty;
+        }
+    }
+
+    function addToCartFromModal() {
+        if (!_lastModalCard) return;
+        var card   = _lastModalCard;
+        var img    = card.querySelector('img');
+        var title  = card.querySelector('.title');
+        var badge  = card.querySelector('.brand-badge');
+        var newP   = card.querySelector('.price .new');
+        var volume = card.querySelector('.volume');
+        var wrap   = card.querySelector('.qty-wrap');
+        var addBtn = card.querySelector('.add-btn');
+        var numEl  = card.querySelector('.qty-num-display');
+
+        var name   = title  ? title.textContent.trim()  : 'Product';
+        var brand  = badge  ? badge.textContent.trim()  : '';
+        var price  = newP   ? newP.textContent.trim()   : '';
+        var imgSrc = img    ? img.src                   : '';
+        var vol    = volume ? volume.textContent.trim() : '';
+
+        var c   = getCart();
+        var idx = c.findIndex(function(i) { return i.name === name && i.volume === vol; });
+        if (idx > -1) { c[idx].qty++; }
+        else { c.push({ name: name, brand: brand, price: price, img: imgSrc, volume: vol, qty: 1 }); idx = c.length - 1; }
+        saveCartData(c);
+        if (wrap)   wrap.classList.add('show');
+        if (numEl)  numEl.textContent = c[idx].qty;
+
+        document.getElementById('productModal').classList.remove('active');
+        window.location.href = 'cart.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var total = getCart().reduce(function(s, i) { return s + i.qty; }, 0);
+        document.querySelectorAll('.cart-count').forEach(function(el) { el.textContent = total; });
+    });
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

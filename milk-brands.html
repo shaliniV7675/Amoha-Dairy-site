@@ -1,0 +1,296 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Milk - Brands | Amoha Dairy</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            background: #faebd5;
+        }
+
+        .page-title {
+            text-align: center;
+            padding: 30px 20px 6px;
+            font-size: clamp(22px, 4vw, 36px);
+            color: #3A1608;
+        }
+
+        .page-subtitle {
+            text-align: center;
+            color: #7a4a2a;
+            font-size: 15px;
+            margin-bottom: 30px;
+        }
+
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            padding: 10px 40px 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .brand-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            overflow: hidden;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .brand-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 28px rgba(0,0,0,0.15);
+        }
+
+        .brand-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .brand-info {
+            padding: 14px 16px 18px;
+        }
+
+        .brand-info h3 {
+            font-size: 17px;
+            color: #3A1608;
+            margin-bottom: 6px;
+        }
+
+        .brand-info .desc {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .brand-info .rate {
+            font-size: 16px;
+            font-weight: bold;
+            color: #5c2e00;
+            margin-bottom: 8px;
+        }
+
+        .brand-info .offer-tag {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            background: #3A1608;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #f0a503;
+        }
+
+        @media (max-width: 768px) {
+            .brand-grid {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 10px 20px 30px;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-grid {
+                grid-template-columns: 1fr;
+                padding: 10px 16px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header>
+    <div class="logo-group">
+        <img src="logo.png.jpeg" height="55" width="58" alt="Amoha Logo">
+        <div class="logo">Amoha Dairy</div>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+    </button>
+    <div class="nav-right">
+        <nav id="main-nav">
+            <a href="front.html">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="login.html">Login</a>
+            <a href="contactus.html">Contact Us</a>
+        </nav>
+        <a href="#" class="btn" style="text-decoration:none;">Download</a>
+    </div>
+</header>
+
+<h1 class="page-title">🥛 Fresh Milk</h1>
+<p class="page-subtitle">Pure, fresh & delivered daily — pick your favourite</p>
+
+<div class="brand-grid">
+
+    <div class="brand-card">
+        <img src="milk.jpeg" alt="Full Cream Milk">
+        <div class="brand-info">
+            <h3>Full Cream Milk</h3>
+            <p class="desc">Rich and creamy whole milk packed with natural fat and nutrients. Perfect for tea, coffee, and everyday use.</p>
+            <p class="rate">₹40 / litre</p>
+            <span class="offer-tag">10% OFF</span>
+            <button class="add-btn" onclick="addToCart('Full Cream Milk')">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="brand-card">
+        <img src="milk.png.jpeg" alt="Toned Milk">
+        <div class="brand-info">
+            <h3>Toned Milk</h3>
+            <p class="desc">Low-fat toned milk ideal for health-conscious families. Retains essential proteins and calcium with reduced fat content.</p>
+            <p class="rate">₹38 / litre</p>
+            <span class="offer-tag">5% OFF</span>
+            <button class="add-btn" onclick="addToCart('Toned Milk')">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="brand-card">
+        <img src="badham milk.jpeg" alt="Badam Milk">
+        <div class="brand-info">
+            <h3>Badam Milk</h3>
+            <p class="desc">Delicious almond-infused milk enriched with saffron and cardamom. A nutritious treat for kids and adults alike.</p>
+            <p class="rate">₹50 / 200ml</p>
+            <span class="offer-tag">8% OFF</span>
+            <button class="add-btn" onclick="addToCart('Badam Milk')">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="brand-card">
+        <img src="flavoredmilk.jpeg" alt="Flavoured Milk">
+        <div class="brand-info">
+            <h3>Flavoured Milk</h3>
+            <p class="desc">Refreshing fruit-flavoured milk available in mango, strawberry, and rose variants. Great as a quick energy drink.</p>
+            <p class="rate">₹45 / 200ml</p>
+            <span class="offer-tag">12% OFF</span>
+            <button class="add-btn" onclick="addToCart('Flavoured Milk')">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="brand-card">
+        <img src="flavouredmilk .jpeg" alt="Chocolate Milk">
+        <div class="brand-info">
+            <h3>Chocolate Milk</h3>
+            <p class="desc">Smooth and indulgent chocolate milk made with real cocoa. A favourite for children and a great post-workout drink.</p>
+            <p class="rate">₹48 / 200ml</p>
+            <span class="offer-tag">7% OFF</span>
+            <button class="add-btn" onclick="addToCart('Chocolate Milk')">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="brand-card">
+        <img src="milkmaid.jpeg" alt="Condensed Milk">
+        <div class="brand-info">
+            <h3>Condensed Milk</h3>
+            <p class="desc">Thick, sweetened condensed milk perfect for desserts, sweets, and baking. Adds rich creaminess to any recipe.</p>
+            <p class="rate">₹60 / tin</p>
+            <span class="offer-tag">15% OFF</span>
+            <button class="add-btn" onclick="addToCart('Condensed Milk')">Add to Cart</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-col footer-brand">
+            <div class="footer-logo-group">
+                <img src="logo.png.jpeg" height="50" width="52" alt="Amoha Logo">
+                <span class="footer-logo-name">Amoha Dairy</span>
+            </div>
+            <p class="footer-tagline">Pure. Fresh. Everyday.<br>Delivered straight from the farm to your doorstep.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="front.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="sign up.html">Sign Up</a></li>
+                <li><a href="contactus.html">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Our Products</h4>
+            <ul>
+                <li><a href="products.html">Fresh Milk</a></li>
+                <li><a href="products.html">Paneer</a></li>
+                <li><a href="products.html">Curd</a></li>
+                <li><a href="products.html">Butter &amp; Ghee</a></li>
+                <li><a href="products.html">Lassi &amp; Buttermilk</a></li>
+                <li><a href="products.html">Flavoured Milk</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <ul class="footer-contact">
+                <li>📍 Rajahmundry, Andhra Pradesh</li>
+                <li>📞 <a href="tel:+919876543210">+91 9876543210</a></li>
+                <li>✉ <a href="mailto:amohadairy@gmail.com">amohadairy@gmail.com</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="Termsandconditions.html">Terms &amp; Conditions</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-social">
+        <span>Follow Us</span>
+        <a href="#" class="social-icon whatsapp" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" class="social-icon facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="social-icon twitter" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" class="social-icon google" aria-label="Google"><i class="fa-brands fa-google"></i></a>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Amoha Dairy. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script>
+    
+    function doLogout() {
+        localStorage.removeItem('amohaLoggedIn');
+        alert('You have been logged out.');
+        window.location.href = 'login.html';
+    }
+    function toggleNav() {
+        document.querySelector('.nav-right').classList.toggle('open');
+    }
+
+    function addToCart(name) {
+        alert('Please login to add ' + name + ' to cart!');
+    }
+</script>
+</body>
+</html>
+
