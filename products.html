@@ -1,0 +1,657 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amoha Dairy - Products</title>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">    <style>
+        body {
+            background: #F5EBDD;
+        }
+
+        /* ── SEARCH ── */
+        .search-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 24px 40px 0;
+        }
+
+        .search-box input {
+            flex: 1 1 200px;
+            max-width: 500px;
+            padding: 12px 18px;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: #3A1608;
+        }
+
+        /* ── PRODUCT CARDS (extended for products page) ── */
+        .card .content {
+            padding: 10px 4px 4px;
+        }
+
+        .card h2 {
+            font-size: 15px;
+            color: #333;
+            margin-top: 6px;
+        }
+
+        .price {
+            margin-top: 8px;
+            font-size: 15px;
+            color: #4b2100;
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .cart {
+            background: #5c2e00;
+            color: white;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .cart:hover {
+            background: #3A1608;
+        }
+
+        .view {
+            background: none;
+            border: none;
+            font-size: 13px;
+            color: gray;
+            cursor: pointer;
+        }
+
+        
+
+        .page-end { height: 40px; }
+
+        @media (max-width: 600px) {
+            .search-box {
+                padding: 16px 16px 0;
+            }
+        }
+    
+/* ── CART PANEL ── */
+.cart-overlay{
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.45); z-index:4000;
+}
+.cart-overlay.open{ display:block; }
+.cart-panel{
+    position:fixed; top:0; right:-420px; width:380px; max-width:95vw;
+    height:100vh; background:#fff; z-index:4001;
+    box-shadow:-4px 0 24px rgba(0,0,0,0.2);
+    display:flex; flex-direction:column;
+    transition:right 0.32s cubic-bezier(.4,0,.2,1);
+}
+.cart-panel.open{ right:0; }
+.cart-header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 20px; background:#3A1608; color:#fff;
+}
+.cart-header h3{ margin:0; font-size:18px; }
+.cart-header-close{
+    background:none; border:none; color:#fff; font-size:24px;
+    cursor:pointer; line-height:1; padding:0 4px;
+}
+.cart-items{
+    flex:1; overflow-y:auto; padding:12px 16px;
+}
+.cart-empty{
+    text-align:center; padding:60px 20px;
+    color:#999; font-size:15px;
+}
+.cart-empty span{ font-size:48px; display:block; margin-bottom:12px; }
+.cart-item{
+    display:flex; gap:12px; align-items:center;
+    border-bottom:1px solid #f0f0f0; padding:10px 0;
+}
+.cart-item img{
+    width:56px; height:56px; object-fit:contain;
+    background:#f8f8f8; border-radius:8px; padding:4px; flex-shrink:0;
+}
+.cart-item-info{ flex:1; min-width:0; }
+.cart-item-name{
+    font-size:13px; font-weight:700; color:#3A1608;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.cart-item-brand{ font-size:11px; color:#888; margin-top:1px; }
+.cart-item-price{ font-size:13px; font-weight:bold; color:#1b5e20; margin-top:4px; }
+.cart-item-qty{
+    display:flex; align-items:center; gap:6px; margin-top:5px;
+}
+.cart-item-qty button{
+    width:24px; height:24px; border-radius:50%;
+    border:1.5px solid #3A1608; background:#fff;
+    font-size:14px; cursor:pointer; color:#3A1608;
+    line-height:1; transition:background 0.15s,color 0.15s;
+    display:flex; align-items:center; justify-content:center;
+}
+.cart-item-qty button:hover{ background:#3A1608; color:#fff; }
+.cart-item-qty span{ font-size:14px; font-weight:bold; min-width:20px; text-align:center; }
+.cart-item-remove{
+    background:none; border:none; color:#cc0000; font-size:18px;
+    cursor:pointer; padding:0 4px; flex-shrink:0;
+}
+.cart-footer{
+    padding:16px 20px; border-top:2px solid #f0f0f0; background:#fafafa;
+}
+.cart-total{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:16px; font-weight:bold; color:#3A1608; margin-bottom:14px;
+}
+.cart-checkout{
+    width:100%; padding:13px; background:#3A1608; color:#fff;
+    border:none; border-radius:10px; font-size:16px; font-weight:bold;
+    cursor:pointer; transition:background 0.2s;
+}
+.cart-checkout:hover{ background:#5c2e00; }
+.cart-btn{ position:relative; }
+.cart-count{
+    position:absolute; top:-7px; right:-9px;
+    background:#f0a503; color:#fff; border-radius:50%;
+    width:18px; height:18px; font-size:10px; font-weight:bold;
+    display:flex; align-items:center; justify-content:center;
+    line-height:1;
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<header>
+    <div class="logo-group">
+        <img src="logo.png.jpeg" height="55" width="58" alt="Amoha Logo">
+        <div class="logo">Amoha Dairy</div>
+    </div>
+
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-right">
+        <nav id="main-nav">
+            <a href="front.html">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="login.html">Login</a>
+                        <a href="myorders.html">myorders</a>
+
+            <a href="contactus.html">Contact Us</a>
+        </nav>
+        <a href="#" class="btn" style="text-decoration:none;" onclick="alert('Please go to Play Store')">Download</a>
+        <a href="cart.html" class="cart-btn" title="Cart">
+            🛒 <span class="cart-count" id="cartCount">0</span>
+        </a>
+        <button class="logout-btn" onclick="doLogout()" style="background-color: #3A1608;" title="Logout"> Logout</button>
+    </div>
+</header>
+
+<!-- ── SEARCH BAR ── -->
+<div class="search-box">
+    <input type="text" placeholder="Search dairy products...">
+    <button class="explore-btn">Search</button>
+</div>
+
+<!-- ── PRODUCT GRID ── -->
+<section class="products">
+
+    <div class="card">
+        <img src="milk.jpeg" alt="Fresh Milk">
+        <div class="content">
+            <h2>Fresh Milk</h2>
+            <div class="price">₹40</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardmilk.html'">Add to Cart</button>
+                
+                <button class="view" onclick="window.location.href='cardmilk.html'">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="curd.jpeg" alt="Curd">
+        <div class="content">
+            <h2>Curd</h2>
+            <div class="price">₹40</div>
+            <div class="buttons">
+                <button class="cart"  onclick="window.location.href='cardcurd.html'">Add to Cart</button>
+                <button class="view" onclick="window.location.href='cardcurd.html'">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="kwalitycorneto.jpg" alt="icecreame">
+        <div class="content">
+            <h2>Kwality corneto</h2>
+            <div class="price">₹30</div>
+            <div class="buttons">
+                <button class="cart"  onclick="window.location.href='cardicecreames.html'"">Add to Cart</button>
+                <button class="view">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="cheese.jpeg" alt="Cheese">
+        <div class="content">
+            <h2>Cheese</h2>
+            <div class="price">₹150</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardcheese.html'">Add to Cart</button>
+                <button class="view" onclick="window.location.href='cardcheese.html'">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="ghee.jpeg" alt="Ghee">
+        <div class="content">
+            <h2>Ghee</h2>
+            <div class="price">₹150</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardghee.html'">Add to Cart</button>
+                <button class="view" onclick="window.location.href='cardghee.html'">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+     <img src="amulmango.jpg" alt="Ghee">
+        <div class="content">
+            <h2>Amul mango lassi</h2>
+            <div class="price">₹30</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardlassi.html'" >Add to Cart</button>
+                <button class="view">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="paneer.jpeg" alt="Paneer">
+        <div class="content">
+            <h2>Paneer</h2>
+            <div class="price">₹80</div>
+            <div class="buttons">
+                <button class="cart"  onclick="window.location.href='cardcheese.html'">Add to Cart</button>
+                <button class="view" onclick="window.location.href='cardcheese.html'">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="butter.jpeg" alt="Butter">
+        <div class="content">
+            <h2>Butter</h2>
+            <div class="price">₹60</div>
+            <div class="buttons">
+                <button class="cart"  onclick="window.location.href='cardbutter.html'">Add to Cart</a></button>
+                <button class="view" onclick="window.location.href='cardbutter.html'">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="lassi.jpeg" alt="Lassi">
+        <div class="content">
+            <h2>Lassi</h2>
+            <div class="price">₹30</div>
+            <div class="buttons">
+                <button class="cart"  onclick="window.location.href='cardbutter.html'">Add to Cart</button>
+                <button class="view" onclick="window.location.href='cardlassi.html'">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="buttermilk.png.jpeg" alt="Buttermilk">
+        <div class="content">
+            <h2>Buttermilk</h2>
+            <div class="price">₹20</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardlassi.html'">Add to Cart</button>
+                <button class="view">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="milkmaid.jpeg" alt="Milkmaid">
+        <div class="content">
+            <h2>Milkmaid</h2>
+            <div class="price">₹60</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardcreames.html'"">Add to Cart</button>
+                <button class="view">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="icecreame.png.jpeg" alt="Ice Creams">
+        <div class="content">
+            <h2>Ice Creams</h2>
+            <div class="price">₹40</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardicecreames.html'">Add to Cart</button>
+                <button class="view" onclick="window.location.href='cardicecreames.html'">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="flavouredmilk .jpeg" alt="Flavoured Milk">
+        <div class="content">
+            <h2>Flavoured Milk</h2>
+            <div class="price">₹30</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardlassi.html'">Add to Cart</button>
+                <button class="view">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="freshcreame.jpeg" alt="Fresh Cream">
+        <div class="content">
+            <h2>Fresh Cream</h2>
+            <div class="price">₹45</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardcreames.html'">Add to Cart</button>
+                <button class="view" onclick="window.location.href='cardcreames.html'">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="hatsunfruit yogurt.jpg" alt="Yogurt">
+        <div class="content">
+            <h2>Yogurt</h2>
+            <div class="price">₹35</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardlassi.html'">Add to Cart</button>
+                <button class="view">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <img src="flavoredmilk.jpeg" alt="Milkshake">
+        <div class="content">
+            <h2>Milkshake</h2>
+            <div class="price">₹50</div>
+            <div class="buttons">
+                <button class="cart" onclick="window.location.href='cardlassi.html'">Add to Cart</button>
+                <button class="view">Quick View</button>
+            </div>
+        </div>
+    </div>
+
+   
+</section>
+
+<div class="page-end"></div>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-col footer-brand">
+            <div class="footer-logo-group">
+                <img src="logo.png.jpeg" height="50" width="52" alt="Amoha Logo">
+                <span class="footer-logo-name">Amoha Dairy</span>
+            </div>
+            <p class="footer-tagline">Pure. Fresh. Everyday.<br>Delivered straight from the farm to your doorstep.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="front.html">Home</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="products.html">Products</a></li>
+                 <li><a href="myorders.html">myorders</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="sign up.html">Sign Up</a></li>
+                <li><a href="contactus.html">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Our Products</h4>
+            <ul>
+                <li><a href="products.html">Fresh Milk</a></li>
+                <li><a href="products.html">Paneer</a></li>
+                <li><a href="products.html">Curd</a></li>
+                <li><a href="products.html">Butter &amp; Ghee</a></li>
+                <li><a href="products.html">Lassi &amp; Buttermilk</a></li>
+                <li><a href="products.html">Flavoured Milk</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <ul class="footer-contact">
+                <li>📍 Rajahmundry, Andhra Pradesh</li>
+                <li>📞 <a href="tel:+919876543210">+91 9876543210</a></li>
+                <li>✉ <a href="mailto:amohadairy@gmail.com">amohadairy@gmail.com</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <ul>
+                <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                <li><a href="Termsandconditions.html">Terms &amp; Conditions</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-social">
+        <span>Follow Us</span>
+        <a href="#" class="social-icon whatsapp" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" class="social-icon facebook" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="social-icon twitter" aria-label="Twitter / X"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="#" class="social-icon google" aria-label="Google"><i class="fa-brands fa-google"></i></a>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Amoha Dairy. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script>
+    function showMessage() {
+        alert("Please Login First");
+    }
+    
+    function doLogout() {
+        localStorage.removeItem('amohaLoggedIn');
+        alert('You have been logged out.');
+        window.location.href = 'login.html';
+    }
+    function toggleNav() {
+        document.querySelector('.nav-right').classList.toggle('open');
+    }
+    
+
+    function addProdToCart(btn, name, brand, price, img, volume) {
+        var card    = btn.closest('.card');
+        var wrap    = card.querySelector('.prod-qty-wrap');
+        var numEl   = card.querySelector('.prod-qty-num');
+        var check   = card.querySelector('.added-check');
+        var buttons = card.querySelector('.buttons');
+
+        var c   = getCart();
+        var idx = c.findIndex(function(i){ return i.name===name && i.volume===volume; });
+        if (idx > -1) { c[idx].qty++; }
+        else { c.push({ name:name, brand:brand, price:price, img:img, volume:volume, qty:1 }); idx=c.length-1; }
+        saveCartData(c);
+
+        buttons.style.display = 'none';
+        wrap.classList.add('show');
+        check.style.display = 'block';
+        numEl.textContent = c[idx].qty;
+    }
+
+    function changeProdQty(btn, delta, name, volume) {
+        var card    = btn.closest('.card');
+        var wrap    = card.querySelector('.prod-qty-wrap');
+        var numEl   = card.querySelector('.prod-qty-num');
+        var check   = card.querySelector('.added-check');
+        var buttons = card.querySelector('.buttons');
+
+        var c   = getCart();
+        var idx = c.findIndex(function(i){ return i.name===name && i.volume===volume; });
+        if (idx === -1) return;
+
+        c[idx].qty += delta;
+        if (c[idx].qty <= 0) {
+            c.splice(idx, 1);
+            saveCartData(c);
+            wrap.classList.remove('show');
+            check.style.display = 'none';
+            buttons.style.display = '';
+        } else {
+            saveCartData(c);
+            numEl.textContent = c[idx].qty;
+        }
+    }
+
+    /* init cart count */
+    document.addEventListener('DOMContentLoaded', function(){
+        var total = getCart().reduce(function(s,i){ return s+i.qty; }, 0);
+        document.querySelectorAll('.cart-count').forEach(function(el){ el.textContent=total; });
+    });
+
+    /* ── CART LOGIC ── */
+    var cart = JSON.parse(localStorage.getItem('amohaCart') || '[]');
+
+    function saveCart(){ localStorage.setItem('amohaCart', JSON.stringify(cart)); }
+
+    function renderCart(){
+        var items = document.getElementById('cartItems');
+        var empty = document.getElementById('cartEmpty');
+        var total = 0;
+        var countEls = document.querySelectorAll('.cart-count');
+        var totalItems = cart.reduce(function(s,i){ return s + i.qty; }, 0);
+        countEls.forEach(function(el){ el.textContent = totalItems; });
+
+        if(cart.length === 0){
+            items.innerHTML = '';
+            items.appendChild(empty || createEmptyMsg());
+            document.getElementById('cartTotal').textContent = '\u20B90';
+            return;
+        }
+        if(empty) empty.style.display = 'none';
+        var html = '';
+        cart.forEach(function(item, idx){
+            var price = parseInt((item.price || '0').replace(/[^\d]/g,'')) || 0;
+            total += price * item.qty;
+            html += '<div class="cart-item">' +
+                '<img src="' + item.img + '" alt="' + item.name + '">' +
+                '<div class="cart-item-info">' +
+                    '<div class="cart-item-name">' + item.name + '</div>' +
+                    '<div class="cart-item-brand">' + item.brand + ' &bull; ' + item.volume + '</div>' +
+                    '<div class="cart-item-price">' + item.price + '</div>' +
+                    '<div class="cart-item-qty">' +
+                        '<button onclick="changeQty(' + idx + ',-1)">&#x2212;</button>' +
+                        '<span>' + item.qty + '</span>' +
+                        '<button onclick="changeQty(' + idx + ',1)">&#x2B;</button>' +
+                    '</div>' +
+                '</div>' +
+                '<button class="cart-item-remove" onclick="removeItem(' + idx + ')" title="Remove">&#x1F5D1;</button>' +
+            '</div>';
+        });
+        items.innerHTML = html;
+        document.getElementById('cartTotal').textContent = '\u20B9' + total;
+    }
+
+    function createEmptyMsg(){
+        var d = document.createElement('div');
+        d.className = 'cart-empty'; d.id = 'cartEmpty';
+        d.innerHTML = '<span>\uD83D\uDED2</span>Your cart is empty.<br>Add items to get started!';
+        return d;
+    }
+
+    function addToCart(name, brand, price, img, volume){
+        var idx = cart.findIndex(function(i){ return i.name === name && i.volume === volume; });
+        if(idx > -1){ cart[idx].qty++; }
+        else { cart.push({ name:name, brand:brand, price:price, img:img, volume:volume, qty:1 }); }
+        saveCart(); renderCart();
+        openCart();
+    }
+
+    function changeQty(idx, delta){
+        cart[idx].qty += delta;
+        if(cart[idx].qty <= 0) cart.splice(idx, 1);
+        saveCart(); renderCart();
+    }
+
+    function removeItem(idx){
+        cart.splice(idx, 1);
+        saveCart(); renderCart();
+    }
+
+    function openCart(){
+        document.getElementById('cartPanel').classList.add('open');
+        document.getElementById('cartOverlay').classList.add('open');
+        renderCart();
+    }
+
+    function closeCart(){
+        document.getElementById('cartPanel').classList.remove('open');
+        document.getElementById('cartOverlay').classList.remove('open');
+    }
+
+    function checkout(){
+        if(cart.length === 0){ alert('Your cart is empty!'); return; }
+        alert('Please login to proceed to checkout!');
+    }
+
+    // Init count on load
+    document.addEventListener('DOMContentLoaded', function(){ renderCart(); });
+</script>
+
+<!-- CART OVERLAY & PANEL -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-panel" id="cartPanel">
+    <div class="cart-header">
+        <h3>&#x1F6D2; My Cart</h3>
+        <button class="cart-header-close" onclick="closeCart()" aria-label="Close cart">&#x2715;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+        <div class="cart-empty" id="cartEmpty">
+            <span>&#x1F6D2;</span>
+            Your cart is empty.<br>Add items to get started!
+        </div>
+    </div>
+    <div class="cart-footer">
+        <div class="cart-total">
+            <span>Total</span>
+            <span id="cartTotal">&#x20B9;0</span>
+        </div>
+        <button class="cart-checkout" onclick="checkout()">Proceed to Checkout</button>
+    </div>
+</div>
+</body>
+</html>
+
+
+
+
