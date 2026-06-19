@@ -1,0 +1,240 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="responsive.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<title>Signup Page</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background: url('imo.png.jpeg') center center / cover no-repeat;
+}
+
+.signup-box{
+    width:350px;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+
+.signup-box h1{
+    text-align:center;
+    margin-bottom:25px;
+    color:#5b381e;
+}
+
+.input-box{
+    margin-bottom:18px;
+}
+
+.input-box input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    outline:none;
+    font-size:16px;
+}
+
+.input-box input:focus{
+    border-color:#F5EBDD;
+}
+
+.signup-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#5b381e;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.signup-btn:hover{
+    background:#5b381e;
+}
+
+.login-text{
+    text-align:center;
+    margin-top:15px;
+}
+
+.login-text a{
+    color:#5b381e;
+    text-decoration:none;
+    font-weight:bold;
+}
+      .privacy-box{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.privacy-box input{
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.privacy-box label{
+    color: #555;
+}
+
+.privacy-box a{
+    color:#5b381e;
+    text-decoration: none;
+}
+
+.privacy-box a:hover{
+    text-decoration: underline;
+}
+
+
+@media (max-width: 600px){
+
+    .privacy-box{
+        font-size: 12px;
+        align-items: flex-start;
+    }
+
+    .privacy-box input{
+        width: 14px;
+        height: 14px;
+    }
+}
+
+
+@media(max-width:400px){
+
+.signup-box{
+    width:90%;
+    padding:20px;
+}
+
+}
+ nav{
+            width: 100%;
+            background: #F5EBDD;
+            padding: 14px 30px;
+            display: flex;
+            justify-content:right;
+            gap: 35px;
+            flex-wrap: wrap;
+            position:fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+
+        nav a{
+            color: rgb(18, 10, 10);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+            transition: color 0.2s;
+        }
+
+        nav a:hover{
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+
+        @media (max-width: 768px){
+
+            nav{
+                gap: 18px;
+                padding: 12px 15px;
+            }
+
+            nav a{
+                font-size: 13px;
+            }
+        }
+
+</style>
+</head>
+
+<body>
+    <nav>
+        <a href="front.html">Home</a>
+        <a href="aboutus.html">About Us</a>
+        <a href="products.html">Products</a>
+        <a href="login.html">Login</a>
+        <a href="contactus.html">Contact Us</a>
+    </nav>
+
+
+<div class="signup-box">
+    <form action="front.html">
+
+    <h1>Signup</h1>
+
+    <div class="input-box">
+        <input type="text" placeholder="Full Name" maxlength="25" required>
+    </div>
+<div class="input-box">
+        <input type="text" placeholder="phone number" maxlength="10" required>
+    </div>
+    <div class="input-box">
+        <input type="email" placeholder="Email Address" required>
+    </div>
+
+    <div class="input-box">
+        <input type="password" placeholder="Password" maxlength="8" required>
+    </div>
+
+    <div class="input-box">
+        <input type="password" placeholder="Confirm Password" maxlength="8" required>
+    </div>
+                <div class="privacy-box">
+    <input type="checkbox" id="privacy" required>
+
+    <label for="privacy">
+        I agree to the 
+        <a href="Termsandconditions.html">Privacy Policy and terms</a>
+    </label>
+</div><br>
+
+   
+    <button type="submit" class="signup-btn" onclick="showMe()" >Create Account</button>
+</form>
+   
+
+    <p class="login-text">
+        Already have an account?
+        <a href="login.html">Login</a>
+    </p>
+</div>
+<script>
+function showMe(){
+        alert("Account created");
+
+    }
+    </script>
+</body>
+</html>
+
