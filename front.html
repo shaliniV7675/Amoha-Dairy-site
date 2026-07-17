@@ -46,8 +46,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 14px;
-            margin-top: 28
-            px;
+            margin-top: 28px;
         }
 
         .hero-img {
@@ -141,7 +140,22 @@
                 padding: 10px 16px 0;
             }
             .products .card {
-                flex: 0 0 150px;
+                flex: 0 0 140px;
+            }
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .button-group .btn,
+            .button-group .explore-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .products .card {
+                flex: 0 0 120px;
             }
         }
 
@@ -308,7 +322,7 @@
         <a href="cart.html" class="cart-btn" title="Cart">
             🛒 <span class="cart-count" id="cartCount">0</span>
         </a>
-            <button class="logout-btn" onclick="doLogout()" style="background-color: #3A1608;" >Logout</button>
+            <button class="logout-btn" id="logoutBtn" onclick="doLogout()" style="background-color: #3A1608; display:none;" >Logout</button>
 
 
 
@@ -334,7 +348,8 @@
     <div class="hero-img">
         <img src="ChatGPT Image May 22, 2026, 02_50_40 PM.png" alt="Amoha Dairy">
     </div>
-</section><br>
+</section>
+
 <h2 class="section-title">Dairy Products</h2>
 
 <div class="scroll-wrapper">
@@ -351,11 +366,7 @@
     </div>
     <button class="scroll-btn" onclick="scrollProducts(1)" aria-label="Scroll right">&#8250;</button>
 </div>
-
-<div class="page-end"></div><br>
-<footer class="site-footer">
-    <div class="footer-inner">
-        <div class="footer-col footer-brand">
+<div class="page-end"></div><footer class="site-footer"><div class="footer-inner"><div class="footer-col footer-brand">
             <div class="footer-logo-group">
                 <img src="logo.png.jpeg" height="50" width="52" alt="Amoha Logo">
                 <span class="footer-logo-name">Amoha Dairy</span>
@@ -442,7 +453,13 @@
         var total = cart.reduce(function(s, i) { return s + i.qty; }, 0);
         var el = document.getElementById('cartCount');
         if (el) el.textContent = total;
+
+        /* Show logout button only when logged in */
+        var btn = document.getElementById('logoutBtn');
+        if (btn) btn.style.display = localStorage.getItem('amohaLoggedIn') ? '' : 'none';
     });
+
+    
 </script>
 </body>
 </html>
