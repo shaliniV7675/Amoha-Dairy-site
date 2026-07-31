@@ -6,6 +6,7 @@
 <title>My Cart — Amoha Dairy</title>
 <link rel="stylesheet" href="responsive.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet href="dashboard.html">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
 body { background:#f5f5f5; padding-top:90px; }
@@ -254,6 +255,8 @@ body { background:#f5f5f5; padding-top:90px; }
             <a href="products.html">Products</a>
             <a href="login.html">Login</a>
                         <a href="myorders.html">myorders</a>
+                         <a href="dashboard.html">dashbord</a>
+
 
             <a href="contactus.html">Contact Us</a>
         </nav>
@@ -484,13 +487,15 @@ body { background:#f5f5f5; padding-top:90px; }
 
     function checkout() {
         if (cart.length === 0) {
-            alert('Your cart is empty!');
+            alert('Your cart is empty! Add some items first.');
             return;
         }
-        else{
-            alert('Fresh goodness is on its way🌱,your order is confirmed!🎉')
+        if (!localStorage.getItem('amohaLoggedIn')) {
+            alert('Please login first to proceed to checkout.');
+            window.location.href = 'login.html';
+            return;
         }
-    
+        window.location.href = 'Shipping.html';
     }
 
     /* ── LOGIN GUARD ── */
