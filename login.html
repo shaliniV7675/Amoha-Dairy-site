@@ -275,26 +275,26 @@
 
         <h2>Login</h2>
 
-        <form action="front.html"><input type="name" placeholder="Enter username"  maxlength="25"  required>
-            <input type="tel" placeholder="Enter Phone Number"  maxlength="10" pattern="[6-9][0-9]{9}" required>
+        <form id="loginForm">
+            <input type="text"     id="loginName"     placeholder="Enter username"  maxlength="25" required>
+            <input type="email"    id="loginEmail"    placeholder="Enter Email"      required>
+            <input type="password" id="loginPassword" placeholder="Enter Password"   maxlength="20" required>
 
-            <input type="email" placeholder="Enter Email"  required>
-            <input type="password" placeholder="Enter Password"  maxlength="8"required>
-            
             <div class="privacy-box">
-    <input type="checkbox" id="privacy" required>
+                <input type="checkbox" id="privacy" required>
+                <label for="privacy">
+                    I agree to the 
+                    <a href="Termsandconditions.html">Privacy Policy and terms</a>
+                </label>
+            </div>
 
-    <label for="privacy">
-        I agree to the 
-        <a href="Termsandconditions.html">Privacy Policy and terms</a>
-    </label>
-</div>
-            <button type="submit"  onclick="showM()">login</button>
+            <p id="loginError" style="color:red;margin-top:10px;font-size:14px;display:none;"></p>
 
+            <button type="submit" id="loginSubmitBtn">Login</button>
         </form>
 
         <div class="bottom-text">
-            Don't have an account? <a href="sign up.html">Sign Up</a>
+            Don't have an account? <a href="signup.html">Sign Up</a>
         </div>
     </div>
 </div>
@@ -315,7 +315,7 @@
                 <li><a href="products.html">Products</a></li>
                 <li><a href="myorders.html">myorders</a></li>
                 <li><a href="login.html">Login</a></li>
-                <li><a href="sign up.html">Sign Up</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
                 <li><a href="contactus.html">Contact Us</a></li>
             </ul>
         </div>
@@ -360,122 +360,58 @@
 
 
 <script>
-
-    function showM(){
-        localStorage.setItem('amohaLoggedIn', 'true');
-        alert("Login successful!");
-    }
     function toggleNav() {
         document.querySelector('.nav-right').classList.toggle('open');
     }
 
-    /* ── CART LOGIC ── */
-    var cart = JSON.parse(localStorage.getItem('amohaCart') || '[]');
+    /* ── LOGIN → Django API ── */
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-    function saveCart(){ localStorage.setItem('amohaCart', JSON.stringify(cart)); }
+        var email    = document.getElementById('loginEmail').value.trim();
+        var password = document.getElementById('loginPassword').value;
+        var errEl    = document.getElementById('loginError');
+        var btn      = document.getElementById('loginSubmitBtn');
 
-    function renderCart(){
-        var items = document.getElementById('cartItems');
-        var empty = document.getElementById('cartEmpty');
-        var total = 0;
-        var countEls = document.querySelectorAll('.cart-count');
-        var totalItems = cart.reduce(function(s,i){ return s + i.qty; }, 0);
-        countEls.forEach(function(el){ el.textContent = totalItems; });
+        errEl.style.display = 'none';
+        btn.textContent = 'Logging in...';
+        btn.disabled = true;
 
-        if(cart.length === 0){
-            items.innerHTML = '';
-            items.appendChild(empty || createEmptyMsg());
-            document.getElementById('cartTotal').textContent = '\u20B90';
-            return;
+        try {
+            var res = await fetch('http://127.0.0.1:8000/api/login/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, password: password })
+            });
+
+            var data = await res.json();
+
+            if (data.success) {
+                // Store login state + user info
+                localStorage.setItem('amohaLoggedIn', 'true');
+                localStorage.setItem('amohaUser', JSON.stringify(data.user));
+                alert('Login successful! Welcome, ' + data.user.full_name + '!');
+                window.location.href = 'front.html';
+            } else {
+                errEl.textContent = data.message;
+                errEl.style.display = 'block';
+            }
+        } catch (err) {
+            errEl.textContent = 'Could not connect to server. Make sure Django is running on port 8000.';
+            errEl.style.display = 'block';
         }
-        if(empty) empty.style.display = 'none';
-        var html = '';
-        cart.forEach(function(item, idx){
-            var price = parseInt((item.price || '0').replace(/[^\d]/g,'')) || 0;
-            total += price * item.qty;
-            html += '<div class="cart-item">' +
-                '<img src="' + item.img + '" alt="' + item.name + '">' +
-                '<div class="cart-item-info">' +
-                    '<div class="cart-item-name">' + item.name + '</div>' +
-                    '<div class="cart-item-brand">' + item.brand + ' &bull; ' + item.volume + '</div>' +
-                    '<div class="cart-item-price">' + item.price + '</div>' +
-                    '<div class="cart-item-qty">' +
-                        '<button onclick="changeQty(' + idx + ',-1)">&#x2212;</button>' +
-                        '<span>' + item.qty + '</span>' +
-                        '<button onclick="changeQty(' + idx + ',1)">&#x2B;</button>' +
-                    '</div>' +
-                '</div>' +
-                '<button class="cart-item-remove" onclick="removeItem(' + idx + ')" title="Remove">&#x1F5D1;</button>' +
-            '</div>';
-        });
-        items.innerHTML = html;
-        document.getElementById('cartTotal').textContent = '\u20B9' + total;
-    }
 
-    function createEmptyMsg(){
-        var d = document.createElement('div');
-        d.className = 'cart-empty'; d.id = 'cartEmpty';
-        d.innerHTML = '<span>\uD83D\uDED2</span>Your cart is empty.<br>Add items to get started!';
-        return d;
-    }
+        btn.textContent = 'Login';
+        btn.disabled = false;
+    });
 
-    function addToCart(name, brand, price, img, volume){
-        var idx = cart.findIndex(function(i){ return i.name === name && i.volume === volume; });
-        if(idx > -1){ cart[idx].qty++; }
-        else { cart.push({ name:name, brand:brand, price:price, img:img, volume:volume, qty:1 }); }
-        saveCart(); renderCart();
-        openCart();
-    }
-
-    function changeQty(idx, delta){
-        cart[idx].qty += delta;
-        if(cart[idx].qty <= 0) cart.splice(idx, 1);
-        saveCart(); renderCart();
-    }
-
-    function removeItem(idx){
-        cart.splice(idx, 1);
-        saveCart(); renderCart();
-    }
-
-    function openCart(){
-        document.getElementById('cartPanel').classList.add('open');
-        document.getElementById('cartOverlay').classList.add('open');
-        renderCart();
-    }
-
-    function closeCart(){
-        document.getElementById('cartPanel').classList.remove('open');
-        document.getElementById('cartOverlay').classList.remove('open');
-    }
-
-    function checkout(){
-        if(cart.length === 0){ alert('Your cart is empty!'); return; }
-        alert('Please login to proceed to checkout!');
-    }
-
-    // Init count on load
-    document.addEventListener('DOMContentLoaded', function(){ renderCart(); });
-     function doLogout()
-        {
-localStorage.removeitem('isLoggedIn');
-alert('you have been logged out')
-window.location.href='front.html';
-        }
-        if(localStorage.getItem('isloggedIn'))
-        
-            var cb=Document.getElementById(cr)
-    function order(){
-        if(login==success)
-    {
-        return window.location.href='myorders.html';
-    }
-    else{
-      alert('please login first to view your orders')  
-        
-    }
-    }        
-    
+    /* ── Cart count ── */
+    document.addEventListener('DOMContentLoaded', function() {
+        var cart  = JSON.parse(localStorage.getItem('amohaCart') || '[]');
+        var total = cart.reduce(function(s, i) { return s + i.qty; }, 0);
+        var el    = document.getElementById('cartCount');
+        if (el) el.textContent = total;
+    });
 </script>
 
 <!-- CART OVERLAY & PANEL -->

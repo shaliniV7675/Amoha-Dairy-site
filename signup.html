@@ -1,0 +1,281 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" href="responsive.css">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<title>Signup Page</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background: url('imo.png.jpeg') center center / cover no-repeat;
+    padding-top: 100px;
+}
+
+.signup-box{
+    width:350px;
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.3);
+    margin: 20px auto;
+}
+
+.signup-box h1{
+    text-align:center;
+    margin-bottom:25px;
+    color:#5b381e;
+}
+
+.input-box{
+    margin-bottom:18px;
+}
+
+.input-box input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    outline:none;
+    font-size:16px;
+}
+
+.input-box input:focus{
+    border-color:#F5EBDD;
+}
+
+.signup-btn{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#5b381e;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.signup-btn:hover{
+    background:#3A1608;
+}
+
+.login-text{
+    text-align:center;
+    margin-top:15px;
+}
+
+.login-text a{
+    color:#5b381e;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.privacy-box{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.privacy-box input{
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.privacy-box label{
+    color: #555;
+}
+
+.privacy-box a{
+    color:#5b381e;
+    text-decoration: none;
+}
+
+.privacy-box a:hover{
+    text-decoration: underline;
+}
+
+@media (max-width: 600px){
+    .privacy-box{
+        font-size: 12px;
+        align-items: flex-start;
+    }
+    .privacy-box input{
+        width: 14px;
+        height: 14px;
+    }
+}
+
+@media(max-width:400px){
+    .signup-box{
+        width:90%;
+        padding:20px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ── SHARED HEADER ── -->
+<header>
+    <div class="logo-group">
+        <img src="logo.png.jpeg" height="55" width="58" alt="Amoha Logo">
+        <div class="logo">Amoha Dairy</div>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle navigation" onclick="toggleNav()">
+        <span></span><span></span><span></span>
+    </button>
+    <div class="nav-right">
+        <nav id="main-nav">
+            <a href="front.html">Home</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="login.html">Login</a>
+            <a href="contactus.html">Contact Us</a>
+        </nav>
+        <a href="#" class="btn" style="text-decoration:none;" onclick="showMi()">Download</a>
+        <a href="cart.html" class="cart-btn" title="Cart">
+            🛒 <span class="cart-count" id="cartCount">0</span>
+        </a>
+    </div>
+</header>
+
+<div class="signup-box">
+    <form id="signupForm">
+
+    <h1>Signup</h1>
+
+    <div class="input-box">
+        <input type="text"     id="sigFullName" placeholder="Full Name"       maxlength="25" required>
+    </div>
+    <div class="input-box">
+        <input type="text"     id="sigPhone"    placeholder="Phone Number"    maxlength="10" required>
+    </div>
+    <div class="input-box">
+        <input type="email"    id="sigEmail"    placeholder="Email Address"   required>
+    </div>
+    <div class="input-box">
+        <input type="password" id="sigPassword" placeholder="Password (min 6 chars)" required>
+    </div>
+    <div class="input-box">
+        <input type="password" id="sigConfirm"  placeholder="Confirm Password" required>
+    </div>
+    <div class="privacy-box">
+        <input type="checkbox" id="privacy" required>
+        <label for="privacy">
+            I agree to the 
+            <a href="Termsandconditions.html">Privacy Policy and terms</a>
+        </label>
+    </div>
+
+    <p id="signupError"   style="color:red;  margin-top:10px;font-size:14px;display:none;"></p>
+    <p id="signupSuccess" style="color:green;margin-top:10px;font-size:14px;display:none;"></p>
+
+    <br>
+    <button type="submit" id="signupSubmitBtn" class="signup-btn">Create Account</button>
+    </form>
+
+    <p class="login-text">
+        Already have an account?
+        <a href="login.html">Login</a>
+    </p>
+</div>
+
+<script>
+    function toggleNav() {
+        document.querySelector('.nav-right').classList.toggle('open');
+    }
+
+    function showMi() {
+        alert("Please go to Play Store");
+    }
+
+    /* ── SIGNUP → Django API ── */
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        var fullName  = document.getElementById('sigFullName').value.trim();
+        var phone     = document.getElementById('sigPhone').value.trim();
+        var email     = document.getElementById('sigEmail').value.trim();
+        var password  = document.getElementById('sigPassword').value;
+        var confirm   = document.getElementById('sigConfirm').value;
+        var errEl     = document.getElementById('signupError');
+        var successEl = document.getElementById('signupSuccess');
+        var btn       = document.getElementById('signupSubmitBtn');
+
+        errEl.style.display     = 'none';
+        successEl.style.display = 'none';
+
+        // Basic client-side check
+        if (password !== confirm) {
+            errEl.textContent    = 'Passwords do not match.';
+            errEl.style.display  = 'block';
+            return;
+        }
+
+        btn.textContent = 'Creating account...';
+        btn.disabled    = true;
+
+        try {
+            var res = await fetch('http://127.0.0.1:8000/api/signup/', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({
+                    full_name:        fullName,
+                    phone:            phone,
+                    email:            email,
+                    password:         password,
+                    confirm_password: confirm
+                })
+            });
+
+            var data = await res.json();
+
+            if (data.success) {
+                successEl.textContent    = data.message + ' Redirecting to login...';
+                successEl.style.display  = 'block';
+                setTimeout(function() { window.location.href = 'login.html'; }, 1500);
+            } else {
+                errEl.textContent   = data.message;
+                errEl.style.display = 'block';
+            }
+        } catch (err) {
+            errEl.textContent   = 'Could not connect to server. Make sure Django is running on port 8000.';
+            errEl.style.display = 'block';
+        }
+
+        btn.textContent = 'Create Account';
+        btn.disabled    = false;
+    });
+
+    /* ── Cart count ── */
+    document.addEventListener('DOMContentLoaded', function() {
+        var cart  = JSON.parse(localStorage.getItem('amohaCart') || '[]');
+        var total = cart.reduce(function(s, i) { return s + i.qty; }, 0);
+        var el    = document.getElementById('cartCount');
+        if (el) el.textContent = total;
+    });
+</script>
+</body>
+</html>
+
