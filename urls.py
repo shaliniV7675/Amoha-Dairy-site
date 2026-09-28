@@ -11,12 +11,16 @@ def serve_html(request, filename):
         raise Http404(f"{filename} not found")
     with open(filepath, 'r', encoding='utf-8') as f:
         return HttpResponse(f.read(), content_type='text/html')
-
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('users.urls')),
-     path('dashboard/', include('dashboard.urls')),
-
-    # Serve frontend HTML pages: http://127.0.0.1:8000/login.html
-    re_path(r'^(?P<filename>[\w\- ]+\.html)$', serve_html),
+    path('api/signup/',      views.signup,      name='signup'),
+    path('api/login/',       views.login,       name='login'),
+    path('api/place-order/', views.place_order, name='place_order'),
+    path('api/my-orders/',   views.get_orders,  name='get_orders'),
 ]
+
+
+from django.urls import path
+from . import views
+
+
+
