@@ -162,7 +162,7 @@ def get_orders(request):
     except User.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'User not found.'}, status=404)
 
-    orders = Order.objects.filter(user=user)
+    orders = Order.objects.filter(user=user).order_by('-placed_at')
 
     orders_data = []
     for o in orders:
@@ -176,9 +176,12 @@ def get_orders(request):
             'discount':       o.discount,
             'grand_total':    o.grand_total,
             'status':         o.status,
-            'placed_at':      o.placed_at.strftime('%d %b %Y'),
+            'placed_at':      o.placed_at.strftime('%d %b %Y, %I:%M %p'),
         })
 
-    return JsonResponse({'success': True, 'orders': orders_data})
-
-# Create your views here.
+    return JsonResponse({
+        'success':     True,
+        'orders':      orders_data,
+        'order_count': len(orders_data),
+        'user_name':   user.full_name,
+    })
